@@ -1,0 +1,4 @@
+<success>                                                                               </success>
+<success>  28.57% test coverage (min required is 20%), give yourself a pat on the back  </success>
+<success>  30 of 105 lines covered in 3 files                                           </success>
+<success>                                                                               </success>

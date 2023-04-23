@@ -1,0 +1,4 @@
+<error>                                          </error>
+<error>  Expected 90% test coverage, got 28.57%  </error>
+<error>  30 of 105 lines covered in 3 files      </error>
+<error>                                          </error>

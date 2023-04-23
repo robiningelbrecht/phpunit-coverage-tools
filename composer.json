@@ -1,0 +1,48 @@
+{
+  "name": "robiningelbrecht/phpunit-coverage-tools",
+  "description": "PHPUnit coverage tools",
+  "keywords": [
+    "Testing",
+    "PHP",
+    "Code coverage",
+    "phpunit"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Robin Ingelbrecht",
+      "email": "ingelbrecht_robin@hotmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1 || ^8.2",
+    "ext-simplexml": "*",
+    "phpunit/phpunit": "^10.1",
+    "prewk/xml-string-streamer": "^1.2",
+    "symfony/console": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "RobinIngelbrecht\\PHPUnitCoverageTools\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "dg/bypass-finals": "^1.4",
+    "friendsofphp/php-cs-fixer": "^3.15",
+    "phpstan/phpstan": "^1.10",
+    "spatie/phpunit-snapshot-assertions": "^5.0"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "lint:fix": " ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+    "phpunit:test": "vendor/bin/phpunit --configuration=tests/phpunit.test.xml --no-output"
+  }
+}

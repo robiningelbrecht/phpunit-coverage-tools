@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  php-cli:
+    build: ./docker/php-cli
+    container_name: phpunit-coverage-tools-php-cli
+    volumes:
+      - ./:/var/www/
+    working_dir: /var/www
+
