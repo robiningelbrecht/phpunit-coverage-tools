@@ -12,7 +12,7 @@
 
 ---
 
-This tool allows you to enforce minimum code coverage by using the clover xml report from PHPUnit. 
+This extension allows you to enforce minimum code coverage by using the clover xml report from PHPUnit. 
 Based on the given threshold the testsuite will exit ok if the coverage is higher than the threshold 
 or exit with code 1 if the coverage is lower than the threshold. 
 This can be used in your continuous deployment environment or for example added to a pre-commit hook.
