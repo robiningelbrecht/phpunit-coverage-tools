@@ -42,3 +42,11 @@ Just run your testsuite like you normally would, but add following aguments.
 ```bash
 vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
 ```
+
+### Coverage OK example
+
+![Coverage OK](readme/succes-example.png)
+
+### Coverage tot low example
+
+![Coverage too low](readme/error-example.png)
