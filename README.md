@@ -1,6 +1,7 @@
 <h1 align="center">PHPUnit Coverage tools</h1>
 
 <p align="center">
+<a href="https://github.com/robiningelbrecht/phpunit-coverage-tools/actions/workflows/ci.yml"><img src="https://github.com/robiningelbrecht/phpunit-coverage-tools/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 <a href="https://github.com/robiningelbrecht/phpunit-coverage-tools/blob/master/LICENSE"><img src="https://img.shields.io/github/license/robiningelbrecht/phpunit-coverage-tools?color=428f7e&logo=open%20source%20initiative&logoColor=white" alt="License"></a>
 <a href="https://phpstan.org/"><img src="https://img.shields.io/badge/PHPStan-level%209-succes.svg?logo=php&logoColor=white&color=31C652" alt="PHPStan Enabled"></a>
 <a href="https://php.net/"><img src="https://img.shields.io/packagist/php-v/robiningelbrecht/phpunit-coverage-tools?color=%23777bb3&logo=php&logoColor=white" alt="PHP"></a>
@@ -10,8 +11,7 @@
 
 ---
 
-This tool allows you to enforce minimum code coverage by using the clover xml report from phpunit 
-and calculates the coverage score. 
+This tool allows you to enforce minimum code coverage by using the clover xml report from PHPUnit. 
 Based on the given threshold the testsuite will exit ok if the coverage is higher than the threshold 
 or exit with code 1 if the coverage is lower than the threshold. 
 This can be used in your continuous deployment environment or for example added to a pre-commit hook.
