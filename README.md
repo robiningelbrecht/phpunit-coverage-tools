@@ -47,6 +47,6 @@ vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
 
 ![Coverage OK](readme/succes-example.png)
 
-### Coverage tot low example
+### Coverage too low example
 
 ![Coverage too low](readme/error-example.png)
