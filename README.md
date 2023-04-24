@@ -40,5 +40,5 @@ Navigate to your `phpunit.xml.dist` file and add following config to set default
 Just run your testsuite like you normally would, but add following aguments.
 
 ```bash
-vendor/bin/phpunit --coverage-clover=clover.xml -d --min-coverage=100
+vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
 ```
