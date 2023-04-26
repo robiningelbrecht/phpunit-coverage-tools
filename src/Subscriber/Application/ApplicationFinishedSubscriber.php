@@ -7,7 +7,6 @@ use PHPUnit\Event\Application\Finished;
 use PHPUnit\Event\Application\FinishedSubscriber;
 use PHPUnit\Runner\Extension\ParameterCollection;
 use PHPUnit\TextUI\Configuration\Configuration;
-use Prewk\XmlStringStreamer;
 use RobinIngelbrecht\PHPUnitCoverageTools\ConsoleOutput;
 use RobinIngelbrecht\PHPUnitCoverageTools\CoverageMetrics;
 use RobinIngelbrecht\PHPUnitCoverageTools\Exitter;
@@ -34,15 +33,23 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             return;
         }
 
-        $streamer = XmlStringStreamer::createUniqueNodeParser($absolutePathToCloverXml, [
-            'uniqueNode' => 'project',
-        ]);
+        $metrics = null;
 
-        /** @var string $node */
-        $node = $streamer->getNode();
-        /** @var \SimpleXMLElement $projectNode */
-        $projectNode = simplexml_load_string($node);
-        $metrics = CoverageMetrics::fromCloverXmlNode($projectNode->metrics);
+        $reader = new \XMLReader();
+        $reader->open($absolutePathToCloverXml);
+        while ($reader->read()) {
+            if (\XMLReader::ELEMENT == $reader->nodeType && 'metrics' == $reader->name && 2 === $reader->depth) {
+                /** @var \SimpleXMLElement $node */
+                $node = simplexml_load_string($reader->readOuterXml());
+                $metrics = CoverageMetrics::fromCloverXmlNode($node);
+                break;
+            }
+        }
+        $reader->close();
+
+        if (!$metrics) {
+            throw new \RuntimeException('Could not determine coverage metrics');
+        }
 
         if ($metrics->getTotalPercentageCoverage() < $this->minCoverage) {
             $this->consoleOutput->error([

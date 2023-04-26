@@ -35,6 +35,6 @@ jobs:
       - name: Send test coverage to codecov.io
         uses: codecov/codecov-action@v3
         with:
-          files: clover.xml,!tests/clover.xml
+          files: clover.xml,!tests/clover.xml,!tests/clover-invalid.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)

@@ -119,16 +119,49 @@ class ApplicationFinishedSubscriberTest extends TestCase
          $this->assertMatchesTextSnapshot($spyOutput);
      }
 
+    public function testNotifyWithNonExistingCloverFile(): void
+    {
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            'tests/clover-wrong.xml',
+            90,
+            false,
+            new Exitter(),
+            new ConsoleOutput($spyOutput),
+        );
+
+        $subscriber->notify(new Finished(
+            new Info(
+                new Snapshot(
+                    HRTime::fromSecondsAndNanoseconds(1, 0),
+                    MemoryUsage::fromBytes(100),
+                    MemoryUsage::fromBytes(100),
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
+                ),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+
+        $this->assertEmpty((string) $spyOutput);
+    }
+
      public function testNotifyWithInvalidCloverFile(): void
      {
          $spyOutput = new SpyOutput();
          $subscriber = new ApplicationFinishedSubscriber(
-             'tests/clover-wrong.xml',
+             'tests/clover-invalid.xml',
              90,
              false,
              new Exitter(),
              new ConsoleOutput($spyOutput),
          );
+
+         $this->expectException(\RuntimeException::class);
+         $this->expectExceptionMessage('Could not determine coverage metrics');
 
          $subscriber->notify(new Finished(
              new Info(
@@ -145,8 +178,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
              ),
              0
          ));
-
-         $this->assertEmpty((string) $spyOutput);
      }
 
      public function testFromConfigurationAndParameters(): void

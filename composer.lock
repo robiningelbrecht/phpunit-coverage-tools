@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1bee5d7c8ca30538eb0b1c6aaa167bc0",
+    "content-hash": "8e86ddd7aba8db0276cefa646cbc2c71",
     "packages": [
         {
             "name": "myclabs/deep-copy",
@@ -651,52 +651,6 @@
                 }
             ],
             "time": "2023-04-17T12:17:05+00:00"
-        },
-        {
-            "name": "prewk/xml-string-streamer",
-            "version": "1.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/prewk/xml-string-streamer.git",
-                "reference": "a1f4a5250d548d06fd385fa86241c0c2d7d607fd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/prewk/xml-string-streamer/zipball/a1f4a5250d548d06fd385fa86241c0c2d7d607fd",
-                "reference": "a1f4a5250d548d06fd385fa86241c0c2d7d607fd",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.3.0",
-                "phpunit/phpunit": "^8.5.8 || ^9.5.0",
-                "prewk/xml-faker": "^0.0.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Prewk\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "prewk",
-                    "email": "oskar.thornblad@gmail.com"
-                }
-            ],
-            "description": "Stream large XML files with low memory consumption",
-            "homepage": "https://github.com/prewk/xml-string-streamer",
-            "support": {
-                "issues": "https://github.com/prewk/xml-string-streamer/issues",
-                "source": "https://github.com/prewk/xml-string-streamer/tree/1.2.3"
-            },
-            "time": "2023-03-03T19:01:39+00:00"
         },
         {
             "name": "psr/container",
@@ -4171,7 +4125,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1 || ^8.2",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "ext-xmlreader": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"
