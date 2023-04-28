@@ -8,15 +8,18 @@ use PHPUnit\Event\Application\FinishedSubscriber;
 use PHPUnit\Runner\Extension\ParameterCollection;
 use PHPUnit\TextUI\Configuration\Configuration;
 use RobinIngelbrecht\PHPUnitCoverageTools\ConsoleOutput;
-use RobinIngelbrecht\PHPUnitCoverageTools\CoverageMetrics;
 use RobinIngelbrecht\PHPUnitCoverageTools\Exitter;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\CoverageMetric;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
 use Symfony\Component\Console\Helper\FormatterHelper;
 
 final class ApplicationFinishedSubscriber extends FormatterHelper implements FinishedSubscriber
 {
     public function __construct(
         private readonly string $relativePathToCloverXml,
-        private readonly int $minCoverage,
+        private readonly MinCoverageRules $minCoverageRules,
         private readonly bool $exitOnLowCoverage,
         private readonly Exitter $exitter,
         private readonly ConsoleOutput $consoleOutput,
@@ -33,41 +36,47 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             return;
         }
 
-        $metrics = null;
+        /** @var CoverageMetric[] $metrics */
+        $metrics = [];
+        $metricTotal = null;
 
+        // @TODO: Move this to static function in CoverageMetric?
         $reader = new \XMLReader();
         $reader->open($absolutePathToCloverXml);
         while ($reader->read()) {
-            if (\XMLReader::ELEMENT == $reader->nodeType && 'metrics' == $reader->name && 2 === $reader->depth) {
+            if ($this->minCoverageRules->hasTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'metrics' == $reader->name && 2 === $reader->depth) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readOuterXml());
-                $metrics = CoverageMetrics::fromCloverXmlNode($node);
-                break;
+                $metricTotal = CoverageMetric::fromCloverXmlNode($node, MinCoverageRules::TOTAL);
+                continue;
+            }
+
+            if ($this->minCoverageRules->hasOtherRulesThanTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name && 3 === $reader->depth) {
+                /** @var \SimpleXMLElement $node */
+                $node = simplexml_load_string($reader->readInnerXml());
+                /** @var string $className */
+                $className = $reader->getAttribute('name');
+                $metrics[] = CoverageMetric::fromCloverXmlNode($node, $className);
             }
         }
         $reader->close();
 
-        if (!$metrics) {
+        if (!$metrics && !$metricTotal) {
             throw new \RuntimeException('Could not determine coverage metrics');
         }
 
-        if ($metrics->getTotalPercentageCoverage() < $this->minCoverage) {
-            $this->consoleOutput->error([
-                sprintf('Expected %s%% test coverage, got %s%%', $this->minCoverage, $metrics->getTotalPercentageCoverage()),
-                sprintf('%s of %s lines covered in %s files', $metrics->getNumberOfCoveredLines(), $metrics->getNumberOfTrackedLines(), $metrics->getNumberOfFiles()),
-            ]);
+        $results = MinCoverageResult::mapFromRulesAndMetrics(
+            $this->minCoverageRules,
+            $metrics,
+            $metricTotal,
+        );
+        $finalStatus = array_values($results)[0]->getStatus();
 
-            if ($this->exitOnLowCoverage) {
-                $this->exitter->exit(1);
-            }
+        $this->consoleOutput->print($results, $finalStatus);
 
-            return;
+        if ($this->exitOnLowCoverage && ResultStatus::FAILED === $finalStatus) {
+            $this->exitter->exit(1);
         }
-
-        $this->consoleOutput->success([
-            sprintf('%s%% test coverage (min required is %s%%), give yourself a pat on the back', $metrics->getTotalPercentageCoverage(), $this->minCoverage),
-            sprintf('%s of %s lines covered in %s files', $metrics->getNumberOfCoveredLines(), $metrics->getNumberOfTrackedLines(), $metrics->getNumberOfFiles()),
-        ]);
     }
 
     /**
@@ -82,30 +91,34 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             return null;
         }
 
-        $minCoverage = null;
+        $rules = null;
         foreach ($args as $arg) {
             if (!str_starts_with($arg, '--min-coverage=')) {
                 continue;
             }
 
-            if (!preg_match('/--min-coverage=(?<minCoverage>[\d]+)/', $arg, $matches)) {
-                break;
+            try {
+                if (preg_match('/--min-coverage=(?<minCoverage>[\d]+)/', $arg, $matches)) {
+                    $rules = MinCoverageRules::fromInt((int) $matches['minCoverage']);
+                    break;
+                }
+
+                if (preg_match('/--min-coverage=(?<minCoverage>[\S]+)/', $arg, $matches)) {
+                    $rules = MinCoverageRules::fromConfigFile(trim($matches['minCoverage'], '"'));
+                    break;
+                }
+            } catch (\RuntimeException) {
+                return null;
             }
-
-            $minCoverage = $matches['minCoverage'];
         }
 
-        if (is_null($minCoverage)) {
-            return null;
-        }
-
-        if ((int) $minCoverage < 0 || (int) $minCoverage > 100) {
+        if (empty($rules) || empty($rules->getRules())) {
             return null;
         }
 
         return new self(
             $configuration->coverageClover(),
-            (int) $minCoverage,
+            $rules,
             $parameters->has('exitOnLowCoverage') && $parameters->get('exitOnLowCoverage'),
             new Exitter(),
             new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),

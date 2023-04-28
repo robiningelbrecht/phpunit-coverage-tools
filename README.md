@@ -37,16 +37,54 @@ Navigate to your `phpunit.xml.dist` file and add following config to set default
 ```
 ## Usage
 
-Just run your testsuite like you normally would, but add following aguments.
+Just run your testsuite like you normally would, but add following arguments:
+
+### --min-coverage=`[INTEGER]`
 
 ```bash
 vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
 ```
 
-### Coverage OK example
+When assigning an integer between 0 - 100, you enforce a minimum code coverage 
+for all your classes. In other words, the total coverage of your project has to be
+higher than this threshold.
 
-![Coverage OK](readme/succes-example.png)
+### --min-coverage=`[path/to/file-with-rules.php]`
 
-### Coverage too low example
+```bash
+vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage="min-coverage-rules.php"
+```
 
-![Coverage too low](readme/error-example.png)
+When referencing a PHP config file, you can configure more complex rules. 
+This allows you to be stricter for critical parts of your application and less strict
+for parts of your app that are not that critical.
+
+For example:
+
+```php
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
+
+return [
+    MinCoverageRules::TOTAL => 20,
+    'RobinIngelbrecht\PHPUnitCoverageTools\*' => 80,
+    'RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber' => 100,
+];
+```
+
+This example will enforce:
+
+- A minimum total coverage of *20%*
+- A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`
+- A *100%* code coverage for the class `ApplicationFinishedSubscriber`
+
+### Example with coverage that is too low
+
+![Coverage FAIL](readme/fail-example.png)
+
+### Example with coverage that generates warning
+
+![Coverage WARNING](readme/warning-example.png)
+
+### Example with coverage that passes
+
+![Coverage WARNING](readme/success-example.png)

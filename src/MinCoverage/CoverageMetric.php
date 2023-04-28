@@ -1,10 +1,11 @@
 <?php
 
-namespace RobinIngelbrecht\PHPUnitCoverageTools;
+namespace RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage;
 
-class CoverageMetrics
+class CoverageMetric
 {
     private function __construct(
+        private readonly string $forClass,
         private readonly int $numberOfMethods,
         private readonly int $numberOfCoveredMethods,
         private readonly int $numberOfStatements,
@@ -13,8 +14,12 @@ class CoverageMetrics
         private readonly int $numberOfCoveredConditionals,
         private readonly int $numberOfTrackedLines,
         private readonly int $numberOfCoveredLines,
-        private readonly int $numberOfFiles,
     ) {
+    }
+
+    public function getForClass(): string
+    {
+        return $this->forClass;
     }
 
     public function getNumberOfMethods(): int
@@ -57,11 +62,6 @@ class CoverageMetrics
         return $this->numberOfCoveredLines;
     }
 
-    public function getNumberOfFiles(): int
-    {
-        return $this->numberOfFiles;
-    }
-
     public function getTotalPercentageCoverage(): float
     {
         // https://confluence.atlassian.com/clover/how-are-the-clover-coverage-percentages-calculated-79986990.html
@@ -71,12 +71,13 @@ class CoverageMetrics
             ($this->getNumberOfConditionals() + $this->getNumberOfStatements() + $this->getNumberOfMethods())) * 100, 2);
     }
 
-    public static function fromCloverXmlNode(\SimpleXMLElement $node): self
+    public static function fromCloverXmlNode(\SimpleXMLElement $node, string $forClass): self
     {
         /** @var \SimpleXMLElement $attributes */
         $attributes = $node->attributes();
 
         return new self(
+            $forClass,
             (int) $attributes['methods'],
             (int) $attributes['coveredmethods'],
             (int) $attributes['statements'],
@@ -85,7 +86,6 @@ class CoverageMetrics
             (int) $attributes['coveredconditionals'],
             (int) $attributes['elements'],
             (int) $attributes['coveredelements'],
-            (int) $attributes['files'],
         );
     }
 }
