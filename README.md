@@ -61,6 +61,8 @@ for parts of your app that are not that critical.
 For example:
 
 ```php
+<?php 
+
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
 
 return [
