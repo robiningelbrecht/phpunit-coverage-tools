@@ -15,23 +15,22 @@
 This extension allows you to enforce minimum code coverage by using the clover xml report from PHPUnit. 
 Based on the given threshold the testsuite will exit ok if the coverage is higher than the threshold 
 or exit with code 1 if the coverage is lower than the threshold. 
-This can be used in your continuous deployment environment or for example added to a pre-commit hook.
+This can be used in your continuous deployment environment or can be added to a pre-commit hook.
 
 ## Installation
 
 ```bash
-composer require robiningelbrecht/phpunit-coverage-tools --dev
+> composer require robiningelbrecht/phpunit-coverage-tools --dev
 ```
 
 ## Configuration
 
-Navigate to your `phpunit.xml.dist` file and add following config to set default options
-(you can also set these options at run time):
+Navigate to your `phpunit.xml.dist` file and add following config to set default options:
 
 ```xml
 <extensions>
     <bootstrap class="RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension">
-        <parameter name="exitOnLowCoverage" value="true"/>
+        <parameter name="exitOnLowCoverage" value="true|false"/>
     </bootstrap>
 </extensions>
 ```
@@ -42,17 +41,17 @@ Just run your testsuite like you normally would, but add following arguments:
 ### --min-coverage=`[INTEGER]`
 
 ```bash
-vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
+> vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage=100
 ```
 
 When assigning an integer between 0 - 100, you enforce a minimum code coverage 
 for all your classes. In other words, the total coverage of your project has to be
 higher than this threshold.
 
-### --min-coverage=`[path/to/file-with-rules.php]`
+### --min-coverage=`[path/to/min-coverage-rules.php]`
 
 ```bash
-vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage="min-coverage-rules.php"
+ > vendor/bin/phpunit --coverage-clover=path/to/clover.xml -d --min-coverage="path/to/min-coverage-rules.php"
 ```
 
 When referencing a PHP config file, you can configure more complex rules. 
