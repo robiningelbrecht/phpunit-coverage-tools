@@ -78,14 +78,14 @@ This example will enforce:
 - A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`
 - *100%* code coverage for the class `ApplicationFinishedSubscriber`
 
-### Example with coverage that is too low
+### Example when coverage is too low
 
 ![Coverage FAIL](readme/fail-example.png)
 
-### Example with coverage that generates warning
+### Example when coverage generates warning
 
 ![Coverage WARNING](readme/warning-example.png)
 
-### Example with coverage that passes
+### Example when coverage passes
 
 ![Coverage WARNING](readme/success-example.png)
