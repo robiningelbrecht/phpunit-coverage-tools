@@ -280,7 +280,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                  'tests/clover.xml',
                  MinCoverageRules::fromInt(90),
                  false,
-                 false,
+                 true,
                  new Exitter(),
                  new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
              ),
@@ -289,7 +289,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                      '--coverage-clover=tests/clover.xml',
                  ]),
                  ParameterCollection::fromArray([]),
-                 ['--min-coverage=90']
+                 ['--min-coverage=90', '--clean-up-clover-xml']
              ),
          );
      }

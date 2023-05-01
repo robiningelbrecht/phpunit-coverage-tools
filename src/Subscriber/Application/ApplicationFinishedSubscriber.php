@@ -121,7 +121,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             return null;
         }
 
-        if (!$cleanUpCloverXml = in_array('--clean-up-clover-xml', $_SERVER['argv'], true)) {
+        if (!$cleanUpCloverXml = in_array('--clean-up-clover-xml', $args, true)) {
             $cleanUpCloverXml = $parameters->has('cleanUpCloverXml') && (int) $parameters->get('cleanUpCloverXml');
         }
 
