@@ -30,7 +30,8 @@ Navigate to your `phpunit.xml.dist` file and add following config to set default
 ```xml
 <extensions>
     <bootstrap class="RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension">
-        <parameter name="exitOnLowCoverage" value="true|false"/>
+        <parameter name="exitOnLowCoverage" value="0|1"/>
+        <parameter name="cleanUpCloverXml" value="0|1"/>
     </bootstrap>
 </extensions>
 ```
@@ -69,6 +70,7 @@ return [
     MinCoverageRules::TOTAL => 20,
     'RobinIngelbrecht\PHPUnitCoverageTools\*' => 80,
     'RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber' => 100,
+    'RobinIngelbrecht\PHPUnitCoverageTools\*CommandHandler' => 100,
 ];
 ```
 
@@ -77,6 +79,11 @@ This example will enforce:
 - A minimum total coverage of *20%*
 - A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`
 - *100%* code coverage for the class `ApplicationFinishedSubscriber`
+- *100%* code coverage for the classes ending with `CommandHandler`
+
+### --clean-up-clover-xml
+
+Adding this argument will clean up the generated clover file after the application has finished running.
 
 ### Example when coverage is too low
 

@@ -21,6 +21,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         private readonly string $relativePathToCloverXml,
         private readonly MinCoverageRules $minCoverageRules,
         private readonly bool $exitOnLowCoverage,
+        private readonly bool $cleanUpCloverXml,
         private readonly Exitter $exitter,
         private readonly ConsoleOutput $consoleOutput,
     ) {
@@ -60,6 +61,10 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             }
         }
         $reader->close();
+
+        if ($this->cleanUpCloverXml) {
+            unlink($absolutePathToCloverXml);
+        }
 
         if (!$metrics && !$metricTotal) {
             throw new \RuntimeException('Could not determine coverage metrics');
@@ -116,10 +121,15 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             return null;
         }
 
+        if (!$cleanUpCloverXml = in_array('--clean-up-clover-xml', $_SERVER['argv'], true)) {
+            $cleanUpCloverXml = $parameters->has('cleanUpCloverXml') && (int) $parameters->get('cleanUpCloverXml');
+        }
+
         return new self(
             $configuration->coverageClover(),
             $rules,
-            $parameters->has('exitOnLowCoverage') && $parameters->get('exitOnLowCoverage'),
+            $parameters->has('exitOnLowCoverage') && (int) $parameters->get('exitOnLowCoverage'),
+            $cleanUpCloverXml,
             new Exitter(),
             new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
         );
