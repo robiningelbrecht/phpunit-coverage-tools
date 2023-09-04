@@ -51,7 +51,6 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
                 $metricTotal = CoverageMetric::fromCloverXmlNode($node, MinCoverageRules::TOTAL);
                 continue;
             }
-
             if ($this->minCoverageRules->hasOtherRulesThanTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name && 3 === $reader->depth) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readInnerXml());
