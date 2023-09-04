@@ -45,16 +45,12 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         $reader = new \XMLReader();
         $reader->open($absolutePathToCloverXml);
         while ($reader->read()) {
-            // Ignore this line until https://github.com/phpstan/phpstan/issues/8629 lands.
-            /** @@phpstan-ignore-next-line */
             if ($this->minCoverageRules->hasTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'metrics' == $reader->name && 2 === $reader->depth) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readOuterXml());
                 $metricTotal = CoverageMetric::fromCloverXmlNode($node, MinCoverageRules::TOTAL);
                 continue;
             }
-            // Ignore this line until https://github.com/phpstan/phpstan/issues/8629 lands.
-            /** @@phpstan-ignore-next-line */
             if ($this->minCoverageRules->hasOtherRulesThanTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name && 3 === $reader->depth) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readInnerXml());
