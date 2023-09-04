@@ -70,9 +70,9 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         }
 
         $results = MinCoverageResult::mapFromRulesAndMetrics(
-            $this->minCoverageRules,
-            $metrics,
-            $metricTotal,
+            minCoverageRules: $this->minCoverageRules,
+            metrics: $metrics,
+            metricTotal: $metricTotal,
         );
         $finalStatus = array_values($results)[0]->getStatus();
 
@@ -125,12 +125,12 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         }
 
         return new self(
-            $configuration->coverageClover(),
-            $rules,
-            $parameters->has('exitOnLowCoverage') && (int) $parameters->get('exitOnLowCoverage'),
-            $cleanUpCloverXml,
-            new Exitter(),
-            new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            relativePathToCloverXml: $configuration->coverageClover(),
+            minCoverageRules: $rules,
+            exitOnLowCoverage: $parameters->has('exitOnLowCoverage') && (int) $parameters->get('exitOnLowCoverage'),
+            cleanUpCloverXml: $cleanUpCloverXml,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
         );
     }
 }
