@@ -34,26 +34,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
-            true,
-            false,
-            $exitter,
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
+            exitOnLowCoverage: true,
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -65,26 +65,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -96,26 +96,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -127,26 +127,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-total-only.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-total-only.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -162,39 +162,76 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->expectExceptionMessage('MinCoverage has to be value between 0 and 100. 203 given');
 
         new ApplicationFinishedSubscriber(
-            'tests/clover.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
+    }
+
+    public function testDivideByZero(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover-test-divide-by-zero.xml',
+            minCoverageRules: MinCoverageRules::fromInt(100),
+            exitOnLowCoverage: true,
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+
+        $subscriber->notify(event: new Finished(
+            new Info(
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+
+        $this->assertMatchesTextSnapshot($spyOutput);
     }
 
     public function testNotifyWithNonExistingCloverFile(): void
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover-wrong.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover-wrong.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -206,29 +243,29 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover-invalid.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            false,
-            false,
-            new Exitter(),
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover-invalid.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Could not determine coverage metrics');
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -246,26 +283,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
-            'tests/clover-to-delete.xml',
-            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
-            true,
-            true,
-            $exitter,
-            new ConsoleOutput($spyOutput),
+            relativePathToCloverXml: 'tests/clover-to-delete.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
+            exitOnLowCoverage: true,
+            cleanUpCloverXml: true,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
         );
 
-        $subscriber->notify(new Finished(
+        $subscriber->notify(event: new Finished(
             new Info(
-                new Snapshot(
-                    HRTime::fromSecondsAndNanoseconds(1, 0),
-                    MemoryUsage::fromBytes(100),
-                    MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
-                Duration::fromSecondsAndNanoseconds(1, 0),
-                MemoryUsage::fromBytes(100),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
             ),
             0
         ));
@@ -277,12 +314,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $this->assertEquals(
             new ApplicationFinishedSubscriber(
-                'tests/clover.xml',
-                MinCoverageRules::fromInt(90),
-                false,
-                true,
-                new Exitter(),
-                new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+                relativePathToCloverXml: 'tests/clover.xml',
+                minCoverageRules: MinCoverageRules::fromInt(90),
+                exitOnLowCoverage: false,
+                cleanUpCloverXml: true,
+                exitter: new Exitter(),
+                consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
             ),
             ApplicationFinishedSubscriber::fromConfigurationAndParameters(
                 (new Builder())->build([
@@ -297,20 +334,20 @@ class ApplicationFinishedSubscriberTest extends TestCase
     public function testFromConfigurationAndParametersFromFile(): void
     {
         $this->assertEquals(
-            new ApplicationFinishedSubscriber(
-                'tests/clover.xml',
-                MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-                false,
-                false,
-                new Exitter(),
-                new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            expected: new ApplicationFinishedSubscriber(
+                relativePathToCloverXml: 'tests/clover.xml',
+                minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+                exitOnLowCoverage: false,
+                cleanUpCloverXml: false,
+                exitter: new Exitter(),
+                consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
             ),
-            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-                (new Builder())->build([
+            actual: ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                configuration: (new Builder())->build([
                     '--coverage-clover=tests/clover.xml',
                 ]),
-                ParameterCollection::fromArray([]),
-                ['--min-coverage="tests/Subscriber/Application/min-coverage-rules-success.php"']
+                parameters: ParameterCollection::fromArray([]),
+                args: ['--min-coverage="tests/Subscriber/Application/min-coverage-rules-success.php"']
             ),
         );
     }
@@ -318,12 +355,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
     public function testFromConfigurationAndParametersWhenInvalidMinCoverage(): void
     {
         $this->assertNull(
-            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-                (new Builder())->build([
+            actual: ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                configuration: (new Builder())->build([
                     '--coverage-clover=tests/clover.xml',
                 ]),
-                ParameterCollection::fromArray([]),
-                ['--min-coverage=a-word']
+                parameters: ParameterCollection::fromArray([]),
+                args: ['--min-coverage=a-word']
             ),
         );
     }
@@ -331,12 +368,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
     public function testFromConfigurationAndParametersWhenCoverageTooHigh(): void
     {
         $this->assertNull(
-            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-                (new Builder())->build([
+            actual: ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                configuration: (new Builder())->build([
                     '--coverage-clover=tests/clover.xml',
                 ]),
-                ParameterCollection::fromArray([]),
-                ['--min-coverage=101']
+                parameters: ParameterCollection::fromArray([]),
+                args: ['--min-coverage=101']
             ),
         );
     }
@@ -345,11 +382,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         $this->assertNull(
             ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-                (new Builder())->build([
+                configuration: (new Builder())->build([
                     '--coverage-clover=tests/clover.xml',
                 ]),
-                ParameterCollection::fromArray([]),
-                ['--min-coverage="tests/Subscriber/Application/min-coverage-rules-empty.php"']
+                parameters: ParameterCollection::fromArray([]),
+                args: ['--min-coverage="tests/Subscriber/Application/min-coverage-rules-empty.php"']
             ),
         );
     }

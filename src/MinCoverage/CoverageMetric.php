@@ -66,9 +66,13 @@ class CoverageMetric
     {
         // https://confluence.atlassian.com/clover/how-are-the-clover-coverage-percentages-calculated-79986990.html
         // TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+        $divideBy = $this->getNumberOfConditionals() + $this->getNumberOfStatements() + $this->getNumberOfMethods();
+        if (0 === $divideBy) {
+            return 0.00;
+        }
 
         return round((($this->getNumberOfCoveredConditionals() + $this->getNumberOfCoveredStatements() + $this->getNumberOfCoveredMethods()) /
-            ($this->getNumberOfConditionals() + $this->getNumberOfStatements() + $this->getNumberOfMethods())) * 100, 2);
+            $divideBy) * 100, 2);
     }
 
     public static function fromCloverXmlNode(\SimpleXMLElement $node, string $forClass): self
@@ -77,15 +81,15 @@ class CoverageMetric
         $attributes = $node->attributes();
 
         return new self(
-            $forClass,
-            (int) $attributes['methods'],
-            (int) $attributes['coveredmethods'],
-            (int) $attributes['statements'],
-            (int) $attributes['coveredstatements'],
-            (int) $attributes['conditionals'],
-            (int) $attributes['coveredconditionals'],
-            (int) $attributes['elements'],
-            (int) $attributes['coveredelements'],
+            forClass: $forClass,
+            numberOfMethods: (int) $attributes['methods'],
+            numberOfCoveredMethods: (int) $attributes['coveredmethods'],
+            numberOfStatements: (int) $attributes['statements'],
+            numberOfCoveredStatements: (int) $attributes['coveredstatements'],
+            numberOfConditionals: (int) $attributes['conditionals'],
+            numberOfCoveredConditionals: (int) $attributes['coveredconditionals'],
+            numberOfTrackedLines: (int) $attributes['elements'],
+            numberOfCoveredLines: (int) $attributes['coveredelements'],
         );
     }
 }

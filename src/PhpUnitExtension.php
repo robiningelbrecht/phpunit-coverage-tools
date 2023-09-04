@@ -16,9 +16,9 @@ final class PhpUnitExtension implements Extension
         ParameterCollection $parameters): void
     {
         if (!$subscriber = ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-            $configuration,
-            $parameters,
-            $_SERVER['argv'],
+            configuration: $configuration,
+            parameters: $parameters,
+            args: $_SERVER['argv'],
         )) {
             return;
         }
