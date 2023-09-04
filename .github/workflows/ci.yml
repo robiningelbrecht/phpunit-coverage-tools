@@ -5,14 +5,18 @@ on:
 jobs:
   test-suite:
     name: PHPStan, PHPcs & Testsuite
+    strategy:
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: [ '8.1', '8.2' ]
     runs-on: ubuntu-latest
 
     steps:
       # https://github.com/marketplace/actions/setup-php-action
-      - name: Setup PHP 8.1 with Xdebug 3.x
+      - name: Setup PHP ${{ matrix.php-versions }} with Xdebug 3.x
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: ${{ matrix.php-versions }}
           coverage: xdebug
 
       # https://github.com/marketplace/actions/checkout
@@ -33,6 +37,7 @@ jobs:
 
       # https://github.com/marketplace/actions/codecov
       - name: Send test coverage to codecov.io
+        if: matrix.php-versions == '8.1'
         uses: codecov/codecov-action@v3
         with:
           files: clover.xml,!tests/clover.xml,!tests/clover-invalid.xml

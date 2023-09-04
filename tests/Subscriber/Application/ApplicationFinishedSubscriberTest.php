@@ -48,7 +48,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     HRTime::fromSecondsAndNanoseconds(1, 0),
                     MemoryUsage::fromBytes(100),
                     MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
                 Duration::fromSecondsAndNanoseconds(1, 0),
                 MemoryUsage::fromBytes(100),
@@ -61,67 +61,67 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
-     public function testNotifyWithAWarning(): void
-     {
-         $spyOutput = new SpyOutput();
-         $subscriber = new ApplicationFinishedSubscriber(
-             'tests/clover.xml',
-             MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
-             false,
-             false,
-             new Exitter(),
-             new ConsoleOutput($spyOutput),
-         );
+    public function testNotifyWithAWarning(): void
+    {
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            'tests/clover.xml',
+            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
+            false,
+            false,
+            new Exitter(),
+            new ConsoleOutput($spyOutput),
+        );
 
-         $subscriber->notify(new Finished(
-             new Info(
-                 new Snapshot(
-                     HRTime::fromSecondsAndNanoseconds(1, 0),
-                     MemoryUsage::fromBytes(100),
-                     MemoryUsage::fromBytes(100),
-                     new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
-                 ),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-             ),
-             0
-         ));
+        $subscriber->notify(new Finished(
+            new Info(
+                new Snapshot(
+                    HRTime::fromSecondsAndNanoseconds(1, 0),
+                    MemoryUsage::fromBytes(100),
+                    MemoryUsage::fromBytes(100),
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
 
-         $this->assertMatchesTextSnapshot($spyOutput);
-     }
+        $this->assertMatchesTextSnapshot($spyOutput);
+    }
 
-     public function testNotifyWhenCoverageIsOk(): void
-     {
-         $spyOutput = new SpyOutput();
-         $subscriber = new ApplicationFinishedSubscriber(
-             'tests/clover.xml',
-             MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-             false,
-             false,
-             new Exitter(),
-             new ConsoleOutput($spyOutput),
-         );
+    public function testNotifyWhenCoverageIsOk(): void
+    {
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            'tests/clover.xml',
+            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+            false,
+            false,
+            new Exitter(),
+            new ConsoleOutput($spyOutput),
+        );
 
-         $subscriber->notify(new Finished(
-             new Info(
-                 new Snapshot(
-                     HRTime::fromSecondsAndNanoseconds(1, 0),
-                     MemoryUsage::fromBytes(100),
-                     MemoryUsage::fromBytes(100),
-                     new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
-                 ),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-             ),
-             0
-         ));
+        $subscriber->notify(new Finished(
+            new Info(
+                new Snapshot(
+                    HRTime::fromSecondsAndNanoseconds(1, 0),
+                    MemoryUsage::fromBytes(100),
+                    MemoryUsage::fromBytes(100),
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
 
-         $this->assertMatchesTextSnapshot($spyOutput);
-     }
+        $this->assertMatchesTextSnapshot($spyOutput);
+    }
 
     public function testNotifyWhitOnlyTotal(): void
     {
@@ -141,7 +141,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     HRTime::fromSecondsAndNanoseconds(1, 0),
                     MemoryUsage::fromBytes(100),
                     MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
                 Duration::fromSecondsAndNanoseconds(1, 0),
                 MemoryUsage::fromBytes(100),
@@ -189,7 +189,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     HRTime::fromSecondsAndNanoseconds(1, 0),
                     MemoryUsage::fromBytes(100),
                     MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
                 Duration::fromSecondsAndNanoseconds(1, 0),
                 MemoryUsage::fromBytes(100),
@@ -202,37 +202,37 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertEmpty((string) $spyOutput);
     }
 
-     public function testNotifyWithInvalidCloverFile(): void
-     {
-         $spyOutput = new SpyOutput();
-         $subscriber = new ApplicationFinishedSubscriber(
-             'tests/clover-invalid.xml',
-             MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-             false,
-             false,
-             new Exitter(),
-             new ConsoleOutput($spyOutput),
-         );
+    public function testNotifyWithInvalidCloverFile(): void
+    {
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            'tests/clover-invalid.xml',
+            MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
+            false,
+            false,
+            new Exitter(),
+            new ConsoleOutput($spyOutput),
+        );
 
-         $this->expectException(\RuntimeException::class);
-         $this->expectExceptionMessage('Could not determine coverage metrics');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not determine coverage metrics');
 
-         $subscriber->notify(new Finished(
-             new Info(
-                 new Snapshot(
-                     HRTime::fromSecondsAndNanoseconds(1, 0),
-                     MemoryUsage::fromBytes(100),
-                     MemoryUsage::fromBytes(100),
-                     new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
-                 ),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-                 Duration::fromSecondsAndNanoseconds(1, 0),
-                 MemoryUsage::fromBytes(100),
-             ),
-             0
-         ));
-     }
+        $subscriber->notify(new Finished(
+            new Info(
+                new Snapshot(
+                    HRTime::fromSecondsAndNanoseconds(1, 0),
+                    MemoryUsage::fromBytes(100),
+                    MemoryUsage::fromBytes(100),
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+                Duration::fromSecondsAndNanoseconds(1, 0),
+                MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+    }
 
     public function testNotifyWithCleanUpCloverFile(): void
     {
@@ -260,7 +260,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     HRTime::fromSecondsAndNanoseconds(1, 0),
                     MemoryUsage::fromBytes(100),
                     MemoryUsage::fromBytes(100),
-                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null)
+                    new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
                 ),
                 Duration::fromSecondsAndNanoseconds(1, 0),
                 MemoryUsage::fromBytes(100),
@@ -273,26 +273,26 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertFileDoesNotExist(dirname(__DIR__, 2).'/clover-to-delete.xml');
     }
 
-     public function testFromConfigurationAndParameters(): void
-     {
-         $this->assertEquals(
-             new ApplicationFinishedSubscriber(
-                 'tests/clover.xml',
-                 MinCoverageRules::fromInt(90),
-                 false,
-                 true,
-                 new Exitter(),
-                 new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
-             ),
-             ApplicationFinishedSubscriber::fromConfigurationAndParameters(
-                 (new Builder())->build([
-                     '--coverage-clover=tests/clover.xml',
-                 ]),
-                 ParameterCollection::fromArray([]),
-                 ['--min-coverage=90', '--clean-up-clover-xml']
-             ),
-         );
-     }
+    public function testFromConfigurationAndParameters(): void
+    {
+        $this->assertEquals(
+            new ApplicationFinishedSubscriber(
+                'tests/clover.xml',
+                MinCoverageRules::fromInt(90),
+                false,
+                true,
+                new Exitter(),
+                new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            ),
+            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                (new Builder())->build([
+                    '--coverage-clover=tests/clover.xml',
+                ]),
+                ParameterCollection::fromArray([]),
+                ['--min-coverage=90', '--clean-up-clover-xml']
+            ),
+        );
+    }
 
     public function testFromConfigurationAndParametersFromFile(): void
     {
