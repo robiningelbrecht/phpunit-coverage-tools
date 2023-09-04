@@ -38,3 +38,4 @@ jobs:
           files: clover.xml,!tests/clover.xml,!tests/clover-invalid.xml,!tests/clover-test-divide-by-zero.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
+          token: ${{ secrets.CODECOV_TOKEN }}
