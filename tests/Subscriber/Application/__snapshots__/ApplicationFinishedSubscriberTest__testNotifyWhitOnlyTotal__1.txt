@@ -2,7 +2,6 @@
 +--+--<fg=black;bg=yellow;options=bold> Code coverage results </>+--+--+
 |<bold> Pattern </bold>|<bold> Expected </bold>|<bold> Actual </bold>|<bold>  </bold>|
 +--+--+--+--+
-| RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension | 100% | <success>100%</success> | <bold>12</bold> of 12 lines covered |
 | Total | 20% | <success>28.57%</success> | <bold>30</bold> of 105 lines covered |
 +--+--+--+--+
 |<success>     All minimum code coverage rules passed, give yourself a pat on the back!      </success>|

@@ -7,6 +7,7 @@
         colors="true"
         defaultTestSuite="unit"
         cacheDirectory=".phpunit.cache"
+        displayDetailsOnTestsThatTriggerWarnings="true"
         bootstrap="tests/bootstrap.php">
   <testsuites>
     <testsuite name="unit">
