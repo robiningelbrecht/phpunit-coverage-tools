@@ -74,7 +74,10 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metrics: $metrics,
             metricTotal: $metricTotal,
         );
-        $finalStatus = array_values($results)[0]->getStatus();
+        $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
+        rsort($statusWeights, SORT_NUMERIC);
+
+        $finalStatus = ResultStatus::fromWeight($statusWeights[0]);
 
         $this->consoleOutput->print($results, $finalStatus);
 

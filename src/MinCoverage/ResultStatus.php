@@ -8,6 +8,16 @@ enum ResultStatus: string
     case WARNING = 'warning';
     case FAILED = 'failed';
 
+    public static function fromWeight(int $weight): self
+    {
+        return match ($weight) {
+            1 => self::SUCCESS ,
+            2 => self::WARNING,
+            3 => self::FAILED,
+            default => throw new \InvalidArgumentException('Invalid weight '.$weight),
+        };
+    }
+
     public function getWeight(): int
     {
         return match ($this) {
