@@ -123,7 +123,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
-    public function testNotifyWhitOnlyTotal(): void
+    public function testNotifyWithOnlyTotal(): void
     {
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
@@ -154,7 +154,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
-    public function testNotifyWhitInvalidRules(): void
+    public function testNotifyWithInvalidRules(): void
     {
         $spyOutput = new SpyOutput();
 
