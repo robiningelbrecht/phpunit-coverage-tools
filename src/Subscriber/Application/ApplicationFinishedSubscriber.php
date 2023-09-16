@@ -75,9 +75,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metricTotal: $metricTotal,
         );
         $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
-        rsort($statusWeights, SORT_NUMERIC);
-
-        $finalStatus = ResultStatus::fromWeight($statusWeights[0]);
+        $finalStatus = ResultStatus::fromWeight(max($statusWeights));
 
         $this->consoleOutput->print($results, $finalStatus);
 
