@@ -77,7 +77,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
         $finalStatus = ResultStatus::fromWeight(max($statusWeights));
 
-        $this->consoleOutput->print($results, $finalStatus);
+        $this->consoleOutput->print($results, $finalStatus, $this->exitOnLowCoverage);
 
         if ($this->exitOnLowCoverage && ResultStatus::FAILED === $finalStatus) {
             $this->exitter->exit(1);

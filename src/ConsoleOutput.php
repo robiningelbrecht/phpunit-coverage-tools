@@ -39,7 +39,7 @@ class ConsoleOutput
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
      */
-    public function print(array $results, ResultStatus $finalStatus): void
+    public function print(array $results, ResultStatus $finalStatus, bool $exitOnLowCoverage): void
     {
         $this->output->writeln('');
         $tableStyle = new TableStyle();
@@ -51,7 +51,7 @@ class ConsoleOutput
         $table
             ->setStyle($tableStyle)
             ->setHeaderTitle('Code coverage results')
-            ->setHeaders(['Pattern', 'Expected', 'Actual', ''])
+            ->setHeaders(['Pattern', 'Expected', 'Actual', '', 'Exit on low coverage?'])
             ->setRows([
                 ...array_map(fn (MinCoverageResult $result) => [
                     $result->getPattern(),
@@ -60,13 +60,14 @@ class ConsoleOutput
                     $result->getNumberOfTrackedLines() > 0 ?
                         sprintf('<bold>%s</bold> of %s lines covered', $result->getNumberOfCoveredLines(), $result->getNumberOfTrackedLines()) :
                         'No lines to track...?',
+                    $exitOnLowCoverage ? 'Yes' : 'No',
                 ], $results),
                 new TableSeparator(),
                 [
                     new TableCell(
                         $finalStatus->getMessage(),
                         [
-                            'colspan' => 4,
+                            'colspan' => 5,
                             'style' => new TableCellStyle([
                                     'align' => 'center',
                                     'cellFormat' => '<'.$finalStatus->value.'>%s</'.$finalStatus->value.'>',

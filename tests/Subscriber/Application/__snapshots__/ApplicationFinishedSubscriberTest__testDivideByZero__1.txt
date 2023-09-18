@@ -1,8 +1,8 @@
 
-+--+--<fg=black;bg=yellow;options=bold> Code coverage results </>+--+--+
-|<bold> Pattern </bold>|<bold> Expected </bold>|<bold> Actual </bold>|<bold>  </bold>|
-+--+--+--+--+
-| Total | 100% | <warning>0%</warning> | No lines to track...? |
-+--+--+--+--+
-|<warning>     There was at least one pattern that did not match any covered classes. Please consider removing them.      </warning>|
-+--+--+--+--+
++--+--+-<fg=black;bg=yellow;options=bold> Code coverage results </>-+--+--+
+|<bold> Pattern </bold>|<bold> Expected </bold>|<bold> Actual </bold>|<bold>  </bold>|<bold> Exit on low coverage? </bold>|
++--+--+--+--+--+
+| Total | 100% | <warning>0%</warning> | No lines to track...? | Yes |
++--+--+--+--+--+
+|<warning>       There was at least one pattern that did not match any covered classes. Please consider removing them.       </warning>|
++--+--+--+--+--+
