@@ -49,7 +49,7 @@ class MinCoverageRules
     {
         return new self(
             [new MinCoverageRule(
-                pattern: self::TOTAL,
+                pattern: MinCoverageRule::TOTAL,
                 minCoverage: $minCoverage,
                 exitOnLowCoverage: $exitOnLowCoverage
             )],
@@ -71,6 +71,10 @@ class MinCoverageRules
             if (!$minCoverageRule instanceof MinCoverageRule) {
                 throw new \RuntimeException('Make sure all coverage rules are of instance '.MinCoverageRule::class);
             }
+        }
+        $patterns = array_map(fn (MinCoverageRule $minCoverageRule) => $minCoverageRule->getPattern(), $rules);
+        if (count(array_unique($patterns)) !== count($patterns)) {
+            throw new \RuntimeException('Make sure all coverage rule patterns are unique');
         }
 
         return new self($rules);

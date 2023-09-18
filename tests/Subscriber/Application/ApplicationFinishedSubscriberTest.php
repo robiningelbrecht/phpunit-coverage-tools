@@ -179,6 +179,22 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
+    public function testNotifyWithDuplicatePatterns(): void
+    {
+        $spyOutput = new SpyOutput();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Make sure all coverage rule patterns are unique');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-duplicates.php'),
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+    }
+
     public function testNotifyWithInvalidRules(): void
     {
         $spyOutput = new SpyOutput();
