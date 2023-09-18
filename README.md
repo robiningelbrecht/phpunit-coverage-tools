@@ -93,7 +93,7 @@ return [
 This example will enforce:
 
 - A minimum total coverage of *20%*
-- A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`, but will `exit = 1` if it fails
+- A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`, but will NOT `exit = 1` if it fails
 - *100%* code coverage for the class `ApplicationFinishedSubscriber`
 - *100%* code coverage for the classes ending with `CommandHandler`
 

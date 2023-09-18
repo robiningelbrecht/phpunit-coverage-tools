@@ -381,6 +381,28 @@ class ApplicationFinishedSubscriberTest extends TestCase
         );
     }
 
+    public function testFromConfigurationAndParameters2(): void
+    {
+        $this->assertEquals(
+            new ApplicationFinishedSubscriber(
+                relativePathToCloverXml: 'tests/clover.xml',
+                minCoverageRules: MinCoverageRules::fromInt(90, true),
+                cleanUpCloverXml: true,
+                exitter: new Exitter(),
+                consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            ),
+            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                (new Builder())->build([
+                    '--coverage-clover=tests/clover.xml',
+                ]),
+                ParameterCollection::fromArray([
+                    'exitOnLowCoverage' => '1',
+                ]),
+                ['--min-coverage=90', '--clean-up-clover-xml']
+            ),
+        );
+    }
+
     public function testFromConfigurationAndParametersFromFile(): void
     {
         $this->assertEquals(
