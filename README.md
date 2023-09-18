@@ -67,17 +67,33 @@ For example:
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
 
 return [
-    MinCoverageRules::TOTAL => 20,
-    'RobinIngelbrecht\PHPUnitCoverageTools\*' => 80,
-    'RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber' => 100,
-    'RobinIngelbrecht\PHPUnitCoverageTools\*CommandHandler' => 100,
+    new MinCoverageRule(
+        pattern: MinCoverageRule::TOTAL,
+        minCoverage: 20,
+        exitOnLowCoverage: true
+    ),
+    new MinCoverageRule(
+        pattern: 'RobinIngelbrecht\PHPUnitCoverageTools\*',
+        minCoverage: 80,
+        exitOnLowCoverage: false
+    ),
+    new MinCoverageRule(
+        pattern: 'RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber',
+        minCoverage: 100,
+        exitOnLowCoverage: true
+    ),   
+    new MinCoverageRule(
+        pattern: 'RobinIngelbrecht\PHPUnitCoverageTools\*CommandHandler',
+        minCoverage: 100,
+        exitOnLowCoverage: true
+    ),
 ];
 ```
 
 This example will enforce:
 
 - A minimum total coverage of *20%*
-- A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`
+- A minimum coverage of *80%* for all classes in namespace `RobinIngelbrecht\PHPUnitCoverageTools`, but will `exit = 1` if it fails
 - *100%* code coverage for the class `ApplicationFinishedSubscriber`
 - *100%* code coverage for the classes ending with `CommandHandler`
 

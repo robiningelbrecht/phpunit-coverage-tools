@@ -1,9 +1,10 @@
 
 +------------------------------------------------<fg=black;bg=yellow;options=bold> Code coverage results </>---------+-------------------------+-------------+
-|<bold>                        Pattern                         </bold>|<bold>  Expected  </bold>|<bold>  Actual  </bold>|<bold>                         </bold>|<bold>  Exit code  </bold>|
+|<bold>                        Pattern                         </bold>|<bold>  Expected  </bold>|<bold>  Actual  </bold>|<bold>                         </bold>|<bold>   Exit on<fg=default;bg=default></>   </bold>|
+|<bold>                                                        </bold>|<bold>            </bold>|<bold>          </bold>|<bold>                         </bold>|<bold>    fail?    </bold>|
 +--------------------------------------------------------+------------+----------+-------------------------+-------------+
-|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension </>|    100%    |   <success>100%</success>   | <bold>12</bold> of 12 lines covered  |      0      |
-|<fg=default;bg=default> Total                                                  </>|    20%     |  <success>28.57%</success>  | <bold>30</bold> of 105 lines covered |      0      |
+|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension </>|    100%    |   <success>100%</success>   |<fg=default;bg=default> <bold>12</bold> of 12 lines covered  </>|     Yes     |
+|<fg=default;bg=default> Total                                                  </>|    20%     |  <success>28.57%</success>  |<fg=default;bg=default> <bold>30</bold> of 105 lines covered </>|     Yes     |
 +--------------------------------------------------------+------------+----------+-------------------------+-------------+
 |<success>                        All minimum code coverage rules passed, give yourself a pat on the back!                        </success>|
 +--------------------------------------------------------+------------+----------+-------------------------+-------------+

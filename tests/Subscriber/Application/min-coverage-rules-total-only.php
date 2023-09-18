@@ -1,7 +1,11 @@
 <?php
 
-use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 
 return [
-    MinCoverageRules::TOTAL => 20,
+    new MinCoverageRule(
+        pattern: MinCoverageRule::TOTAL,
+        minCoverage: 20,
+        exitOnLowCoverage: true
+    ),
 ];

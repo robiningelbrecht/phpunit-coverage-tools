@@ -10,6 +10,7 @@ class MinCoverageResult
         private readonly float $actualMinCoverage,
         private readonly int $numberOfTrackedLines,
         private readonly int $numberOfCoveredLines,
+        private readonly bool $exitOnLowCoverage
     ) {
     }
 
@@ -47,19 +48,26 @@ class MinCoverageResult
         return $this->numberOfCoveredLines;
     }
 
+    public function exitOnLowCoverage(): bool
+    {
+        return $this->exitOnLowCoverage;
+    }
+
     public static function fromPatternAndNumbers(
         string $pattern,
         int $expectedMinCoverage,
         float $actualMinCoverage,
         int $numberOfTrackedLines,
         int $numberOfCoveredLines,
+        bool $exitOnLowCoverage
     ): self {
         return new self(
-            $pattern,
-            $expectedMinCoverage,
-            $actualMinCoverage,
-            $numberOfTrackedLines,
-            $numberOfCoveredLines,
+            pattern: $pattern,
+            expectedMinCoverage: $expectedMinCoverage,
+            actualMinCoverage: $actualMinCoverage,
+            numberOfTrackedLines: $numberOfTrackedLines,
+            numberOfCoveredLines: $numberOfCoveredLines,
+            exitOnLowCoverage: $exitOnLowCoverage
         );
     }
 
@@ -74,14 +82,17 @@ class MinCoverageResult
         CoverageMetric $metricTotal = null,
     ): array {
         $results = [];
-        foreach ($minCoverageRules->getRules() as $pattern => $minCoverage) {
-            if (MinCoverageRules::TOTAL === $pattern && $metricTotal) {
+        foreach ($minCoverageRules->getRules() as $minCoverageRule) {
+            $pattern = $minCoverageRule->getPattern();
+            $minCoverage = $minCoverageRule->getMinCoverage();
+            if (MinCoverageRule::TOTAL === $minCoverageRule->getPattern() && $metricTotal) {
                 $results[] = MinCoverageResult::fromPatternAndNumbers(
-                    $pattern,
-                    $minCoverage,
-                    $metricTotal->getTotalPercentageCoverage(),
-                    $metricTotal->getNumberOfTrackedLines(),
-                    $metricTotal->getNumberOfCoveredLines()
+                    pattern: $pattern,
+                    expectedMinCoverage: $minCoverage,
+                    actualMinCoverage: $metricTotal->getTotalPercentageCoverage(),
+                    numberOfTrackedLines: $metricTotal->getNumberOfTrackedLines(),
+                    numberOfCoveredLines: $metricTotal->getNumberOfCoveredLines(),
+                    exitOnLowCoverage: $minCoverageRule->exitOnLowCoverage()
                 );
                 continue;
             }
@@ -97,16 +108,17 @@ class MinCoverageResult
             }
 
             $results[] = MinCoverageResult::fromPatternAndNumbers(
-                $pattern,
-                $minCoverage,
-                round($coveragePercentage, 2),
-                $totalTrackedLines,
-                $totalCoveredLines
+                pattern: $pattern,
+                expectedMinCoverage: $minCoverage,
+                actualMinCoverage: round($coveragePercentage, 2),
+                numberOfTrackedLines: $totalTrackedLines,
+                numberOfCoveredLines: $totalCoveredLines,
+                exitOnLowCoverage: $minCoverageRule->exitOnLowCoverage()
             );
         }
 
         uasort($results, function (MinCoverageResult $a, MinCoverageResult $b) {
-            if (MinCoverageRules::TOTAL === $a->getPattern()) {
+            if (MinCoverageRule::TOTAL === $a->getPattern()) {
                 return 1;
             }
             if ($a->getStatus() === $b->getStatus()) {

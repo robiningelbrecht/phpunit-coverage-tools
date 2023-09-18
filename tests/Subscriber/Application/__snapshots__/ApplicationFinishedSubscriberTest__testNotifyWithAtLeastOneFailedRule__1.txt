@@ -1,11 +1,12 @@
 
 +------------------------------------------------------------------<fg=black;bg=yellow;options=bold> Code coverage results </>---+------------+----------+-------------------------+------------+
-|<bold>                                          Pattern                                           </bold>|<bold>  Expected  </bold>|<bold>  Actual  </bold>|<bold>                         </bold>|<bold> Exit code  </bold>|
+|<bold>                                          Pattern                                           </bold>|<bold>  Expected  </bold>|<bold>  Actual  </bold>|<bold>                         </bold>|<bold>  Exit on<fg=default;bg=default></>   </bold>|
+|<bold>                                                                                            </bold>|<bold>            </bold>|<bold>          </bold>|<bold>                         </bold>|<bold>   fail?    </bold>|
 +--------------------------------------------------------------------------------------------+------------+----------+-------------------------+------------+
-|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\CoverageMetrics                                      </>|    100%    |    <failed>0%</failed>    |  <bold>0</bold> of 48 lines covered  |     1      |
-|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber </>|    100%    |   <failed>40%</failed>    | <bold>18</bold> of 45 lines covered  |     1      |
-|<fg=default;bg=default> RobinIngelbrecht\NonExistingNameSpace                                                      </>|    100%    |    <warning>0%</warning>    |  No lines to track...?  |     1      |
-|<fg=default;bg=default> Total                                                                                      </>|    20%     |  <success>28.57%</success>  | <bold>30</bold> of 105 lines covered |     1      |
+|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\CoverageMetrics                                      </>|    100%    |    <failed>0%</failed>    |<fg=default;bg=default> <bold>0</bold> of 48 lines covered   </>|     No     |
+|<fg=default;bg=default> RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber </>|    100%    |   <failed>40%</failed>    |<fg=default;bg=default> <bold>18</bold> of 45 lines covered  </>|    Yes     |
+|<fg=default;bg=default> RobinIngelbrecht\NonExistingNameSpace                                                      </>|    100%    |    <warning>0%</warning>    |<fg=default;bg=default> No lines to track...?   </>|    Yes     |
+|<fg=default;bg=default> Total                                                                                      </>|    20%     |  <success>28.57%</success>  |<fg=default;bg=default> <bold>30</bold> of 105 lines covered </>|    Yes     |
 +--------------------------------------------------------------------------------------------+------------+----------+-------------------------+------------+
 |<failed>                                            Not all minimum code coverage rules passed, please try again... :)                                             </failed>|
 +--------------------------------------------------------------------------------------------+------------+----------+-------------------------+------------+

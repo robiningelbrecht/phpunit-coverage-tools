@@ -9,12 +9,6 @@
         cacheDirectory=".phpunit.cache"
         displayDetailsOnTestsThatTriggerWarnings="true"
         bootstrap="tests/bootstrap.php">
-  <extensions>
-    <bootstrap class="RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension">
-      <parameter name="exitOnLowCoverage" value="1"/>
-      <parameter name="cleanUpCloverXml" value="1"/>
-    </bootstrap>
-  </extensions>
   <testsuites>
     <testsuite name="unit">
       <directory>tests</directory>

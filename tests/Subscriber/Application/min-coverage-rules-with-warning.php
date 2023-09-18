@@ -1,8 +1,16 @@
 <?php
 
-use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 
 return [
-    MinCoverageRules::TOTAL => 20,
-    'RobinIngelbrecht\NonExistingNameSpace' => 100,
+    new MinCoverageRule(
+        pattern: MinCoverageRule::TOTAL,
+        minCoverage: 20,
+        exitOnLowCoverage: true
+    ),
+    new MinCoverageRule(
+        pattern: 'RobinIngelbrecht\NonExistingNameSpace',
+        minCoverage: 100,
+        exitOnLowCoverage: true
+    ),
 ];

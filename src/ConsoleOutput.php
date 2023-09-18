@@ -39,7 +39,7 @@ class ConsoleOutput
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
      */
-    public function print(array $results, ResultStatus $finalStatus, bool $exitOnLowCoverage): void
+    public function print(array $results, ResultStatus $finalStatus): void
     {
         $this->output->writeln('');
         $tableStyle = new TableStyle();
@@ -52,7 +52,7 @@ class ConsoleOutput
         $table
             ->setStyle($tableStyle)
             ->setHeaderTitle('Code coverage results')
-            ->setHeaders(['Pattern', 'Expected', 'Actual', '', 'Exit code'])
+            ->setHeaders(['Pattern', 'Expected', 'Actual', '', 'Exit on fail?'])
             ->setColumnMaxWidth(1, 10)
             ->setColumnMaxWidth(2, 8)
             ->setColumnMaxWidth(4, 11)
@@ -68,10 +68,17 @@ class ConsoleOutput
                     ),
                     $result->getExpectedMinCoverage().'%',
                     sprintf('<%s>%s%%</%s>', $result->getStatus()->value, $result->getActualMinCoverage(), $result->getStatus()->value),
-                    $result->getNumberOfTrackedLines() > 0 ?
-                        sprintf('<bold>%s</bold> of %s lines covered', $result->getNumberOfCoveredLines(), $result->getNumberOfTrackedLines()) :
-                        'No lines to track...?',
-                   $exitOnLowCoverage ? 1 : 0,
+                    new TableCell(
+                        $result->getNumberOfTrackedLines() > 0 ?
+                            sprintf('<bold>%s</bold> of %s lines covered', $result->getNumberOfCoveredLines(), $result->getNumberOfTrackedLines()) :
+                            'No lines to track...?',
+                        [
+                            'style' => new TableCellStyle([
+                                'align' => 'left',
+                            ]),
+                        ]
+                    ),
+                   $result->exitOnLowCoverage() ? 'Yes' : 'No',
                 ], $results),
                 new TableSeparator(),
                 [
