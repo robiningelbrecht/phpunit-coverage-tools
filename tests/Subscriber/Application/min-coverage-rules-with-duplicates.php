@@ -4,12 +4,12 @@ use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 
 return [
     new MinCoverageRule(
-        pattern: MinCoverageRule::TOTAL,
-        minCoverage: 20,
+        pattern: 'RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension',
+        minCoverage: 100,
         exitOnLowCoverage: true
     ),
     new MinCoverageRule(
-        pattern: 'RobinIngelbrecht\NonExistingNameSpace',
+        pattern: 'RobinIngelbrecht\PHPUnitCoverageTools\PhpUnitExtension',
         minCoverage: 100,
         exitOnLowCoverage: true
     ),

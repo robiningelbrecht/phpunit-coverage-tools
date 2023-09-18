@@ -6,16 +6,17 @@ use Composer\Autoload\ClassLoader;
 
 class MinCoverageRules
 {
+    /** @deprecated Use MinCoverageRule::TOTAL  */
     public const TOTAL = 'Total';
 
     private function __construct(
-        /** @var array<string, int> */
+        /** @var \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule[] */
         private readonly array $rules
     ) {
     }
 
     /**
-     * @return array<string, int>
+     * @return \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule[]
      */
     public function getRules(): array
     {
@@ -24,13 +25,8 @@ class MinCoverageRules
 
     public function hasTotalRule(): bool
     {
-        return array_key_exists(self::TOTAL, $this->rules);
-    }
-
-    public function hasOtherRulesThanTotalRule(): bool
-    {
-        foreach ($this->rules as $pattern => $minCoverage) {
-            if (self::TOTAL !== $pattern) {
+        foreach ($this->rules as $rule) {
+            if ($rule->isTotalRule()) {
                 return true;
             }
         }
@@ -38,14 +34,25 @@ class MinCoverageRules
         return false;
     }
 
-    public static function fromInt(int $minCoverage): self
+    public function hasOtherRulesThanTotalRule(): bool
     {
-        if ($minCoverage < 0 || $minCoverage > 100) {
-            throw new \RuntimeException(sprintf('MinCoverage has to be value between 0 and 100. %s given', $minCoverage));
+        foreach ($this->rules as $rule) {
+            if (!$rule->isTotalRule()) {
+                return true;
+            }
         }
 
+        return false;
+    }
+
+    public static function fromInt(int $minCoverage, bool $exitOnLowCoverage): self
+    {
         return new self(
-            [self::TOTAL => $minCoverage],
+            [new MinCoverageRule(
+                pattern: MinCoverageRule::TOTAL,
+                minCoverage: $minCoverage,
+                exitOnLowCoverage: $exitOnLowCoverage
+            )],
         );
     }
 
@@ -60,10 +67,14 @@ class MinCoverageRules
         }
 
         $rules = require $absolutePathToConfigFile;
-        foreach ($rules as $minCoverage) {
-            if ($minCoverage < 0 || $minCoverage > 100) {
-                throw new \RuntimeException(sprintf('MinCoverage has to be value between 0 and 100. %s given', $minCoverage));
+        foreach ($rules as $minCoverageRule) {
+            if (!$minCoverageRule instanceof MinCoverageRule) {
+                throw new \RuntimeException('Make sure all coverage rules are of instance '.MinCoverageRule::class);
             }
+        }
+        $patterns = array_map(fn (MinCoverageRule $minCoverageRule) => $minCoverageRule->getPattern(), $rules);
+        if (count(array_unique($patterns)) !== count($patterns)) {
+            throw new \RuntimeException('Make sure all coverage rule patterns are unique');
         }
 
         return new self($rules);

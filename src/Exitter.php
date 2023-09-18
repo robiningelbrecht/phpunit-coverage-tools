@@ -4,8 +4,8 @@ namespace RobinIngelbrecht\PHPUnitCoverageTools;
 
 class Exitter
 {
-    public function exit(int $code): void
+    public function exit(): void
     {
-        exit($code);
+        exit(1);
     }
 }

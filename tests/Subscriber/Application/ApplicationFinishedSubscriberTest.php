@@ -29,14 +29,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
         $exitter
             ->expects($this->once())
-            ->method('exit')
-            ->with(1);
+            ->method('exit');
 
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
-            exitOnLowCoverage: true,
             cleanUpCloverXml: false,
             exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -67,7 +65,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
-            exitOnLowCoverage: false,
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -98,7 +95,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            exitOnLowCoverage: false,
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -129,7 +125,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-total-only.php'),
-            exitOnLowCoverage: false,
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -154,6 +149,52 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
+    public function testNotifyWithoutTotal(): void
+    {
+        $spyOutput = new SpyOutput();
+        $subscriber = new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-without-total.php'),
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+
+        $subscriber->notify(event: new Finished(
+            new Info(
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+
+        $this->assertMatchesTextSnapshot($spyOutput);
+    }
+
+    public function testNotifyWithDuplicatePatterns(): void
+    {
+        $spyOutput = new SpyOutput();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Make sure all coverage rule patterns are unique');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-duplicates.php'),
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+    }
+
     public function testNotifyWithInvalidRules(): void
     {
         $spyOutput = new SpyOutput();
@@ -164,7 +205,22 @@ class ApplicationFinishedSubscriberTest extends TestCase
         new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
-            exitOnLowCoverage: false,
+            cleanUpCloverXml: false,
+            exitter: new Exitter(),
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+    }
+
+    public function testNotifyWithInvalidRuleInstances(): void
+    {
+        $spyOutput = new SpyOutput();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Make sure all coverage rules are of instance RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-invalid-rule-instances.php'),
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -182,8 +238,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-test-divide-by-zero.xml',
-            minCoverageRules: MinCoverageRules::fromInt(100),
-            exitOnLowCoverage: true,
+            minCoverageRules: MinCoverageRules::fromInt(100, true),
             cleanUpCloverXml: false,
             exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -214,7 +269,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-wrong.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            exitOnLowCoverage: false,
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -245,7 +299,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-invalid.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-            exitOnLowCoverage: false,
             cleanUpCloverXml: false,
             exitter: new Exitter(),
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -278,14 +331,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
         $exitter
             ->expects($this->once())
-            ->method('exit')
-            ->with(1);
+            ->method('exit');
 
         $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-to-delete.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
-            exitOnLowCoverage: true,
             cleanUpCloverXml: true,
             exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
@@ -315,8 +366,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertEquals(
             new ApplicationFinishedSubscriber(
                 relativePathToCloverXml: 'tests/clover.xml',
-                minCoverageRules: MinCoverageRules::fromInt(90),
-                exitOnLowCoverage: false,
+                minCoverageRules: MinCoverageRules::fromInt(90, false),
                 cleanUpCloverXml: true,
                 exitter: new Exitter(),
                 consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
@@ -331,13 +381,34 @@ class ApplicationFinishedSubscriberTest extends TestCase
         );
     }
 
+    public function testFromConfigurationAndParameters2(): void
+    {
+        $this->assertEquals(
+            new ApplicationFinishedSubscriber(
+                relativePathToCloverXml: 'tests/clover.xml',
+                minCoverageRules: MinCoverageRules::fromInt(90, true),
+                cleanUpCloverXml: true,
+                exitter: new Exitter(),
+                consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            ),
+            ApplicationFinishedSubscriber::fromConfigurationAndParameters(
+                (new Builder())->build([
+                    '--coverage-clover=tests/clover.xml',
+                ]),
+                ParameterCollection::fromArray([
+                    'exitOnLowCoverage' => '1',
+                ]),
+                ['--min-coverage=90', '--clean-up-clover-xml']
+            ),
+        );
+    }
+
     public function testFromConfigurationAndParametersFromFile(): void
     {
         $this->assertEquals(
             expected: new ApplicationFinishedSubscriber(
                 relativePathToCloverXml: 'tests/clover.xml',
                 minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
-                exitOnLowCoverage: false,
                 cleanUpCloverXml: false,
                 exitter: new Exitter(),
                 consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
