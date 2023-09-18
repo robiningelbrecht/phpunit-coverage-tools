@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
-class SpyOutput extends NullOutput implements \Stringable
+class SpyOutput extends BufferedOutput implements \Stringable
 {
     private array $messages = [];
 

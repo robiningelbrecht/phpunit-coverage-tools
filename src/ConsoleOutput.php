@@ -45,22 +45,33 @@ class ConsoleOutput
         $tableStyle = new TableStyle();
         $tableStyle
             ->setHeaderTitleFormat('<fg=black;bg=yellow;options=bold> %s </>')
-            ->setCellHeaderFormat('<bold>%s</bold>');
+            ->setCellHeaderFormat('<bold>%s</bold>')
+            ->setPadType(STR_PAD_BOTH);
 
         $table = new Table($this->output);
         $table
             ->setStyle($tableStyle)
             ->setHeaderTitle('Code coverage results')
-            ->setHeaders(['Pattern', 'Expected', 'Actual', '', 'Exit on low coverage?'])
+            ->setHeaders(['Pattern', 'Expected', 'Actual', '', 'Exit code'])
+            ->setColumnMaxWidth(1, 10)
+            ->setColumnMaxWidth(2, 8)
+            ->setColumnMaxWidth(4, 11)
             ->setRows([
                 ...array_map(fn (MinCoverageResult $result) => [
-                    $result->getPattern(),
+                    new TableCell(
+                        $result->getPattern(),
+                        [
+                            'style' => new TableCellStyle([
+                                'align' => 'left',
+                            ]),
+                        ]
+                    ),
                     $result->getExpectedMinCoverage().'%',
                     sprintf('<%s>%s%%</%s>', $result->getStatus()->value, $result->getActualMinCoverage(), $result->getStatus()->value),
                     $result->getNumberOfTrackedLines() > 0 ?
                         sprintf('<bold>%s</bold> of %s lines covered', $result->getNumberOfCoveredLines(), $result->getNumberOfTrackedLines()) :
                         'No lines to track...?',
-                    $exitOnLowCoverage ? 'Yes' : 'No',
+                   $exitOnLowCoverage ? 1 : 0,
                 ], $results),
                 new TableSeparator(),
                 [
