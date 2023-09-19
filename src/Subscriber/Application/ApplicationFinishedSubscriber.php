@@ -74,17 +74,13 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metrics: $metrics,
             metricTotal: $metricTotal,
         );
-        $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
-        $finalStatus = ResultStatus::fromWeight(max($statusWeights));
-
-        $this->consoleOutput->print($results, $finalStatus);
+        $this->consoleOutput->print($results);
 
         $needsExit = !empty(array_filter(
             $results,
-            fn (MinCoverageResult $minCoverageResult) => $minCoverageResult->exitOnLowCoverage())
+            fn (MinCoverageResult $minCoverageResult) => $minCoverageResult->exitOnLowCoverage() && ResultStatus::FAILED === $minCoverageResult->getStatus())
         );
-        if (ResultStatus::FAILED === $finalStatus
-            && $needsExit) {
+        if ($needsExit) {
             $this->exitter->exit();
         }
     }
