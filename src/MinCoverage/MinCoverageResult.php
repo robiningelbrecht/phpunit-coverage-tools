@@ -53,24 +53,6 @@ class MinCoverageResult
         return $this->exitOnLowCoverage;
     }
 
-    public static function fromPatternAndNumbers(
-        string $pattern,
-        int $expectedMinCoverage,
-        float $actualMinCoverage,
-        int $numberOfTrackedLines,
-        int $numberOfCoveredLines,
-        bool $exitOnLowCoverage
-    ): self {
-        return new self(
-            pattern: $pattern,
-            expectedMinCoverage: $expectedMinCoverage,
-            actualMinCoverage: $actualMinCoverage,
-            numberOfTrackedLines: $numberOfTrackedLines,
-            numberOfCoveredLines: $numberOfCoveredLines,
-            exitOnLowCoverage: $exitOnLowCoverage
-        );
-    }
-
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\CoverageMetric[] $metrics
      *
@@ -86,7 +68,7 @@ class MinCoverageResult
             $pattern = $minCoverageRule->getPattern();
             $minCoverage = $minCoverageRule->getMinCoverage();
             if (MinCoverageRule::TOTAL === $minCoverageRule->getPattern() && $metricTotal) {
-                $results[] = MinCoverageResult::fromPatternAndNumbers(
+                $results[] = new MinCoverageResult(
                     pattern: $pattern,
                     expectedMinCoverage: $minCoverage,
                     actualMinCoverage: $metricTotal->getTotalPercentageCoverage(),
@@ -107,7 +89,7 @@ class MinCoverageResult
                 $coveragePercentage += ($metric->getTotalPercentageCoverage() * $weight);
             }
 
-            $results[] = MinCoverageResult::fromPatternAndNumbers(
+            $results[] = new MinCoverageResult(
                 pattern: $pattern,
                 expectedMinCoverage: $minCoverage,
                 actualMinCoverage: round($coveragePercentage, 2),
