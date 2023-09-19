@@ -64,7 +64,7 @@ For example:
 ```php
 <?php 
 
-use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
+use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 
 return [
     new MinCoverageRule(
