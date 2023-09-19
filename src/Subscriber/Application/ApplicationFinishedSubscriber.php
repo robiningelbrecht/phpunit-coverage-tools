@@ -78,8 +78,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metricTotal: $metricTotal,
         );
 
-        $duration = $timer->stop();
-        $this->consoleOutput->print($results, $duration);
+        $this->consoleOutput->print($results, $timer->stop());
 
         $needsExit = !empty(array_filter(
             $results,
