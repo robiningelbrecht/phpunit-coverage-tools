@@ -26,12 +26,12 @@ class ApplicationFinishedSubscriberTest extends TestCase
     public function testNotifyWithAtLeastOneFailedRule(): void
     {
         $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
 
         $exitter
             ->expects($this->once())
             ->method('exit');
 
-        $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
@@ -61,12 +61,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithAWarning(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -91,12 +97,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWhenCoverageIsOk(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -121,12 +133,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithOnlyTotal(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-total-only.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -151,12 +169,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithoutTotal(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-without-total.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -179,63 +203,51 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
-    public function testNotifyWithDuplicatePatterns(): void
-    {
-        $spyOutput = new SpyOutput();
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Make sure all coverage rule patterns are unique');
-
-        new ApplicationFinishedSubscriber(
-            relativePathToCloverXml: 'tests/clover.xml',
-            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-duplicates.php'),
-            cleanUpCloverXml: false,
-            exitter: new Exitter(),
-            consoleOutput: new ConsoleOutput($spyOutput),
-        );
-    }
-
-    public function testNotifyWithInvalidRules(): void
-    {
-        $spyOutput = new SpyOutput();
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('MinCoverage has to be value between 0 and 100. 203 given');
-
-        new ApplicationFinishedSubscriber(
-            relativePathToCloverXml: 'tests/clover.xml',
-            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
-            cleanUpCloverXml: false,
-            exitter: new Exitter(),
-            consoleOutput: new ConsoleOutput($spyOutput),
-        );
-    }
-
-    public function testNotifyWithInvalidRuleInstances(): void
-    {
-        $spyOutput = new SpyOutput();
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Make sure all coverage rules are of instance RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule');
-
-        new ApplicationFinishedSubscriber(
-            relativePathToCloverXml: 'tests/clover.xml',
-            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-invalid-rule-instances.php'),
-            cleanUpCloverXml: false,
-            exitter: new Exitter(),
-            consoleOutput: new ConsoleOutput($spyOutput),
-        );
-    }
-
-    public function testDivideByZero(): void
+    public function testNotifyWithRulesThatDoNotExit(): void
     {
         $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
 
         $exitter
             ->expects($this->never())
             ->method('exit');
 
+        $subscriber = new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-no-exit.php'),
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+
+        $subscriber->notify(event: new Finished(
+            new Info(
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+
+        $this->assertMatchesTextSnapshot($spyOutput);
+    }
+
+    public function testDivideByZero(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-test-divide-by-zero.xml',
             minCoverageRules: MinCoverageRules::fromInt(100, true),
@@ -265,12 +277,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithNonExistingCloverFile(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-wrong.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -295,12 +313,18 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithInvalidCloverFile(): void
     {
+        $exitter = $this->createMock(Exitter::class);
         $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-invalid.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
-            exitter: new Exitter(),
+            exitter: $exitter,
             consoleOutput: new ConsoleOutput($spyOutput),
         );
 
@@ -327,13 +351,14 @@ class ApplicationFinishedSubscriberTest extends TestCase
     public function testNotifyWithCleanUpCloverFile(): void
     {
         copy(dirname(__DIR__, 2).'/clover.xml', dirname(__DIR__, 2).'/clover-to-delete.xml');
+
         $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
 
         $exitter
             ->expects($this->once())
             ->method('exit');
 
-        $spyOutput = new SpyOutput();
         $subscriber = new ApplicationFinishedSubscriber(
             relativePathToCloverXml: 'tests/clover-to-delete.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
@@ -359,6 +384,69 @@ class ApplicationFinishedSubscriberTest extends TestCase
         ));
 
         $this->assertFileDoesNotExist(dirname(__DIR__, 2).'/clover-to-delete.xml');
+    }
+
+    public function testNotifyWithDuplicatePatterns(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Make sure all coverage rule patterns are unique');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-duplicates.php'),
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+    }
+
+    public function testNotifyWithInvalidRules(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('MinCoverage has to be value between 0 and 100. 203 given');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+    }
+
+    public function testNotifyWithInvalidRuleInstances(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Make sure all coverage rules are of instance RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule');
+
+        new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-invalid-rule-instances.php'),
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
     }
 
     public function testFromConfigurationAndParameters(): void

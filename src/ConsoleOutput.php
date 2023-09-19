@@ -39,8 +39,11 @@ class ConsoleOutput
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
      */
-    public function print(array $results, ResultStatus $finalStatus): void
+    public function print(array $results): void
     {
+        $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
+        $finalStatus = ResultStatus::fromWeight(max($statusWeights));
+
         $this->output->writeln('');
         $tableStyle = new TableStyle();
         $tableStyle
