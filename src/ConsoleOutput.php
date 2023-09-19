@@ -4,6 +4,8 @@ namespace RobinIngelbrecht\PHPUnitCoverageTools;
 
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
+use SebastianBergmann\Timer\Duration;
+use SebastianBergmann\Timer\ResourceUsageFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
@@ -39,7 +41,7 @@ class ConsoleOutput
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
      */
-    public function print(array $results): void
+    public function print(array $results, Duration $duration): void
     {
         $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
         $finalStatus = ResultStatus::fromWeight(max($statusWeights));
@@ -99,5 +101,6 @@ class ConsoleOutput
                 ],
             ]);
         $table->render();
+        $this->output->writeln((new ResourceUsageFormatter())->resourceUsage($duration));
     }
 }

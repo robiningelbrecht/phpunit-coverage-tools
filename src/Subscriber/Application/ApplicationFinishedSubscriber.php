@@ -14,6 +14,7 @@ use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
+use SebastianBergmann\Timer\Timer;
 use Symfony\Component\Console\Helper\FormatterHelper;
 
 final class ApplicationFinishedSubscriber extends FormatterHelper implements FinishedSubscriber
@@ -29,6 +30,8 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
 
     public function notify(Finished $event): void
     {
+        $timer = new Timer();
+        $timer->start();
         /** @var string $reflectionFileName */
         $reflectionFileName = (new \ReflectionClass(ClassLoader::class))->getFileName();
         $absolutePathToCloverXml = dirname($reflectionFileName, 3).'/'.$this->relativePathToCloverXml;
@@ -74,7 +77,9 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metrics: $metrics,
             metricTotal: $metricTotal,
         );
-        $this->consoleOutput->print($results);
+
+        $duration = $timer->stop();
+        $this->consoleOutput->print($results, $duration);
 
         $needsExit = !empty(array_filter(
             $results,
