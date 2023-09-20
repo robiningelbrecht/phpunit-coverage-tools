@@ -4,8 +4,9 @@ namespace RobinIngelbrecht\PHPUnitCoverageTools;
 
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\ResourceUsageFormatter;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\SystemResourceUsageFormatter;
 use SebastianBergmann\Timer\Duration;
-use SebastianBergmann\Timer\ResourceUsageFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
@@ -18,6 +19,7 @@ final class ConsoleOutput
 {
     public function __construct(
         private readonly OutputInterface $output,
+        private readonly ResourceUsageFormatter $resourceUsageFormatter,
     ) {
         $this->output->setDecorated(true);
         $this->output->getFormatter()->setStyle(
@@ -40,7 +42,10 @@ final class ConsoleOutput
 
     public static function create(): self
     {
-        return new self(new \Symfony\Component\Console\Output\ConsoleOutput());
+        return new self(
+            output: new \Symfony\Component\Console\Output\ConsoleOutput(),
+            resourceUsageFormatter: SystemResourceUsageFormatter::create()
+        );
     }
 
     /**
@@ -106,6 +111,6 @@ final class ConsoleOutput
                 ],
             ]);
         $table->render();
-        $this->output->writeln((new ResourceUsageFormatter())->resourceUsage($duration));
+        $this->output->writeln($this->resourceUsageFormatter->resourceUsage($duration));
     }
 }

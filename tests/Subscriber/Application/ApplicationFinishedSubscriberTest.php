@@ -17,9 +17,11 @@ use RobinIngelbrecht\PHPUnitCoverageTools\ConsoleOutput;
 use RobinIngelbrecht\PHPUnitCoverageTools\Exitter;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
 use RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\ResourceUsageFormatter;
 use RobinIngelbrecht\PHPUnitCoverageTools\Timer\SystemTimer;
 use RobinIngelbrecht\PHPUnitCoverageTools\Timer\Timer;
 use Spatie\Snapshots\MatchesSnapshots;
+use Tests\FixedResourceUsageFormatter;
 use Tests\PausedTimer;
 use Tests\SpyOutput;
 
@@ -29,19 +31,21 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     private MockObject $exitter;
     private Timer $timer;
+    private ResourceUsageFormatter $resourceUsageFormatter;
+    private SpyOutput $output;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->exitter = $this->createMock(Exitter::class);
+        $this->output = new SpyOutput();
         $this->timer = PausedTimer::withDuration(\SebastianBergmann\Timer\Duration::fromMicroseconds(350123));
+        $this->resourceUsageFormatter = FixedResourceUsageFormatter::withUsageInMb(12.00);
     }
 
     public function testNotifyWithAtLeastOneFailedRule(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->once())
             ->method('exit');
@@ -51,7 +55,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -71,13 +75,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWithAWarning(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -87,7 +89,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-warning.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -107,13 +109,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWhenCoverageIsOk(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -123,7 +123,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -143,13 +143,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWithOnlyTotal(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -159,7 +157,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-total-only.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -179,13 +177,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWithoutTotal(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -195,7 +191,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-without-total.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -215,13 +211,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWithRulesThatDoNotExit(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -231,7 +225,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-no-exit.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -251,13 +245,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testDivideByZero(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -267,7 +259,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromInt(100, true),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -287,13 +279,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($spyOutput);
+        $this->assertMatchesTextSnapshot($this->output);
     }
 
     public function testNotifyWithNonExistingCloverFile(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -303,7 +293,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -323,13 +313,11 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertEmpty((string) $spyOutput);
+        $this->assertEmpty((string) $this->output);
     }
 
     public function testNotifyWithInvalidCloverFile(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -339,7 +327,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-success.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -367,8 +355,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
     {
         copy(dirname(__DIR__, 2).'/clover.xml', dirname(__DIR__, 2).'/clover-to-delete.xml');
 
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->once())
             ->method('exit');
@@ -378,7 +364,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-failed-rule.php'),
             cleanUpCloverXml: true,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
 
@@ -403,8 +389,6 @@ class ApplicationFinishedSubscriberTest extends TestCase
 
     public function testNotifyWithDuplicatePatterns(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -417,15 +401,13 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-duplicates.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
     }
 
     public function testNotifyWithInvalidRules(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -438,15 +420,13 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-invalid.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
     }
 
     public function testNotifyWithInvalidRuleInstances(): void
     {
-        $spyOutput = new SpyOutput();
-
         $this->exitter
             ->expects($this->never())
             ->method('exit');
@@ -459,7 +439,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-invalid-rule-instances.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,
-            consoleOutput: new ConsoleOutput($spyOutput),
+            consoleOutput: new ConsoleOutput($this->output, $this->resourceUsageFormatter),
             timer: $this->timer,
         );
     }

@@ -12,18 +12,24 @@ final class SystemTimer implements Timer
     ) {
     }
 
+    public static function create(): self
+    {
+        return new self(new PhpUnitTimer());
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function start(): void
     {
         $this->timer->start();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function stop(): Duration
     {
         return $this->timer->stop();
-    }
-
-    public static function create(): self
-    {
-        return new self(new PhpUnitTimer());
     }
 }
