@@ -14,7 +14,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsoleOutput
+final class ConsoleOutput
 {
     public function __construct(
         private readonly OutputInterface $output,
@@ -36,6 +36,11 @@ class ConsoleOutput
             'bold',
             new OutputFormatterStyle(null, null, ['bold'])
         );
+    }
+
+    public static function create(): self
+    {
+        return new self(new \Symfony\Component\Console\Output\ConsoleOutput());
     }
 
     /**

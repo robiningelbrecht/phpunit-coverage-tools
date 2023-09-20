@@ -14,7 +14,8 @@ use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRules;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
-use SebastianBergmann\Timer\Timer;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\SystemTimer;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\Timer;
 use Symfony\Component\Console\Helper\FormatterHelper;
 
 final class ApplicationFinishedSubscriber extends FormatterHelper implements FinishedSubscriber
@@ -25,13 +26,13 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         private readonly bool $cleanUpCloverXml,
         private readonly Exitter $exitter,
         private readonly ConsoleOutput $consoleOutput,
+        private readonly Timer $timer,
     ) {
     }
 
     public function notify(Finished $event): void
     {
-        $timer = new Timer();
-        $timer->start();
+        $this->timer->start();
         /** @var string $reflectionFileName */
         $reflectionFileName = (new \ReflectionClass(ClassLoader::class))->getFileName();
         $absolutePathToCloverXml = dirname($reflectionFileName, 3).'/'.$this->relativePathToCloverXml;
@@ -51,7 +52,10 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             if ($this->minCoverageRules->hasTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'metrics' == $reader->name && 2 === $reader->depth) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readOuterXml());
-                $metricTotal = CoverageMetric::fromCloverXmlNode($node, MinCoverageRule::TOTAL);
+                $metricTotal = CoverageMetric::fromCloverXmlNode(
+                    node: $node,
+                    forClass: MinCoverageRule::TOTAL
+                );
                 continue;
             }
             if ($this->minCoverageRules->hasOtherRulesThanTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name && 3 === $reader->depth) {
@@ -59,7 +63,10 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
                 $node = simplexml_load_string($reader->readInnerXml());
                 /** @var string $className */
                 $className = $reader->getAttribute('name');
-                $metrics[] = CoverageMetric::fromCloverXmlNode($node, $className);
+                $metrics[] = CoverageMetric::fromCloverXmlNode(
+                    node: $node,
+                    forClass: $className
+                );
             }
         }
         $reader->close();
@@ -78,7 +85,10 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             metricTotal: $metricTotal,
         );
 
-        $this->consoleOutput->print($results, $timer->stop());
+        $this->consoleOutput->print(
+            results: $results,
+            duration: $this->timer->stop()
+        );
 
         $needsExit = !empty(array_filter(
             $results,
@@ -138,7 +148,8 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
             minCoverageRules: $rules,
             cleanUpCloverXml: $cleanUpCloverXml,
             exitter: new Exitter(),
-            consoleOutput: new ConsoleOutput(new \Symfony\Component\Console\Output\ConsoleOutput()),
+            consoleOutput: ConsoleOutput::create(),
+            timer: SystemTimer::create(),
         );
     }
 }
