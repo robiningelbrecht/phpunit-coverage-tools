@@ -7,3 +7,4 @@
 +-----------------------+------------+----------+-----------------------+-------------+
 |<warning> There was at least one pattern that did not match any covered classes. Please consider removing them. </warning>|
 +-----------------------+------------+----------+-----------------------+-------------+
+Time: 00:00.350, Memory: 12.00 MB

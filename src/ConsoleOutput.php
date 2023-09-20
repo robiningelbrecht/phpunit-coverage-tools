@@ -4,6 +4,9 @@ namespace RobinIngelbrecht\PHPUnitCoverageTools;
 
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult;
 use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\ResultStatus;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\ResourceUsageFormatter;
+use RobinIngelbrecht\PHPUnitCoverageTools\Timer\SystemResourceUsageFormatter;
+use SebastianBergmann\Timer\Duration;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
@@ -12,10 +15,11 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsoleOutput
+final class ConsoleOutput
 {
     public function __construct(
         private readonly OutputInterface $output,
+        private readonly ResourceUsageFormatter $resourceUsageFormatter,
     ) {
         $this->output->setDecorated(true);
         $this->output->getFormatter()->setStyle(
@@ -36,10 +40,18 @@ class ConsoleOutput
         );
     }
 
+    public static function create(): self
+    {
+        return new self(
+            output: new \Symfony\Component\Console\Output\ConsoleOutput(),
+            resourceUsageFormatter: SystemResourceUsageFormatter::create()
+        );
+    }
+
     /**
      * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
      */
-    public function print(array $results): void
+    public function print(array $results, Duration $duration): void
     {
         $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
         $finalStatus = ResultStatus::fromWeight(max($statusWeights));
@@ -99,5 +111,6 @@ class ConsoleOutput
                 ],
             ]);
         $table->render();
+        $this->output->writeln($this->resourceUsageFormatter->resourceUsage($duration));
     }
 }
