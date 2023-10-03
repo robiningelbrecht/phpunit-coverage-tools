@@ -275,6 +275,42 @@ class ApplicationFinishedSubscriberTest extends TestCase
         $this->assertMatchesTextSnapshot($spyOutput);
     }
 
+    public function testNotifyWhenNoTrackedLines(): void
+    {
+        $exitter = $this->createMock(Exitter::class);
+        $spyOutput = new SpyOutput();
+
+        $exitter
+            ->expects($this->never())
+            ->method('exit');
+
+        $subscriber = new ApplicationFinishedSubscriber(
+            relativePathToCloverXml: 'tests/clover.xml',
+            minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-with-no-tracked-lines.php'),
+            cleanUpCloverXml: false,
+            exitter: $exitter,
+            consoleOutput: new ConsoleOutput($spyOutput),
+        );
+
+        $subscriber->notify(event: new Finished(
+            new Info(
+                current: new Snapshot(
+                    time: HRTime::fromSecondsAndNanoseconds(1, 0),
+                    memoryUsage: MemoryUsage::fromBytes(100),
+                    peakMemoryUsage: MemoryUsage::fromBytes(100),
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                ),
+                durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySinceStart: MemoryUsage::fromBytes(100),
+                durationSincePrevious: Duration::fromSecondsAndNanoseconds(1, 0),
+                memorySincePrevious: MemoryUsage::fromBytes(100),
+            ),
+            0
+        ));
+
+        $this->assertMatchesTextSnapshot($spyOutput);
+    }
+
     public function testNotifyWithNonExistingCloverFile(): void
     {
         $exitter = $this->createMock(Exitter::class);

@@ -85,6 +85,10 @@ class MinCoverageResult
 
             $coveragePercentage = 0;
             foreach ($metricsForPattern as $metric) {
+                if (0 === $totalTrackedLines) {
+                    $coveragePercentage = 0;
+                    continue;
+                }
                 $weight = $metric->getNumberOfTrackedLines() / $totalTrackedLines;
                 $coveragePercentage += ($metric->getTotalPercentageCoverage() * $weight);
             }
