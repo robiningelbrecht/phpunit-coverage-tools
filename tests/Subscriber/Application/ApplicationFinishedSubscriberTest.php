@@ -289,7 +289,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             ->method('exit');
 
         $subscriber = new ApplicationFinishedSubscriber(
-            relativePathToCloverXml: 'tests/clover.xml',
+            relativePathToCloverXml: 'tests/clover-with-no-tracked-lines.xml',
             minCoverageRules: MinCoverageRules::fromConfigFile('tests/Subscriber/Application/min-coverage-rules-no-tracked-lines.php'),
             cleanUpCloverXml: false,
             exitter: $this->exitter,

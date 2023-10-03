@@ -4,7 +4,7 @@ use RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule;
 
 return [
     new MinCoverageRule(
-        pattern: '*NonExistingPattern',
+        pattern: '*CommandHandler',
         minCoverage: 20,
         exitOnLowCoverage: true
     ),
