@@ -113,12 +113,12 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
 
         $rules = null;
         foreach ($args as $arg) {
-            if (!str_starts_with($arg, '--min-coverage=')) {
+            if (!str_starts_with($arg, '--min-coverage=') && !str_starts_with($arg, '--phpunit-min-coverage=')) {
                 continue;
             }
 
             try {
-                if (preg_match('/--min-coverage=(?<minCoverage>[\d]+)/', $arg, $matches)) {
+                if (preg_match('/-min-coverage=(?<minCoverage>[\d]+)/', $arg, $matches)) {
                     $rules = MinCoverageRules::fromInt(
                         minCoverage: (int) $matches['minCoverage'],
                         exitOnLowCoverage: $parameters->has('exitOnLowCoverage') && (int) $parameters->get('exitOnLowCoverage')
@@ -126,7 +126,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
                     break;
                 }
 
-                if (preg_match('/--min-coverage=(?<minCoverage>[\S]+)/', $arg, $matches)) {
+                if (preg_match('/-min-coverage=(?<minCoverage>[\S]+)/', $arg, $matches)) {
                     $rules = MinCoverageRules::fromConfigFile(trim($matches['minCoverage'], '"'));
                     break;
                 }
