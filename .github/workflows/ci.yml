@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   test-suite:
-    name: PHPStan, PHPcs & Testsuite for PHP${{ matrix.php-versions }}
+    name: PHPStan, PHPcs & Testsuite
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       # https://github.com/marketplace/actions/setup-php-action
-      - name: Setup PHP 8.1 with Xdebug 3.x
+      - name: Setup PHP ${{ matrix.php-versions }} with Xdebug 3.x
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
