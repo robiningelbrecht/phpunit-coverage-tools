@@ -8,6 +8,9 @@ use PHPUnit\Runner\Extension\ParameterCollection;
 use PHPUnit\TextUI\Configuration\Configuration;
 use RobinIngelbrecht\PHPUnitCoverageTools\Subscriber\Application\ApplicationFinishedSubscriber;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class PhpUnitExtension implements Extension
 {
     public function bootstrap(
