@@ -58,7 +58,9 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
                 );
                 continue;
             }
-            if ($this->minCoverageRules->hasOtherRulesThanTotalRule() && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name && 3 === $reader->depth) {
+            if ($this->minCoverageRules->hasOtherRulesThanTotalRule()
+                && \XMLReader::ELEMENT == $reader->nodeType && 'class' == $reader->name
+                && (3 === $reader->depth || 4 === $reader->depth)) {
                 /** @var \SimpleXMLElement $node */
                 $node = simplexml_load_string($reader->readInnerXml());
                 /** @var string $className */
