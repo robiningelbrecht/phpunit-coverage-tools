@@ -61,7 +61,7 @@ class MinCoverageResult
     public static function mapFromRulesAndMetrics(
         MinCoverageRules $minCoverageRules,
         array $metrics,
-        CoverageMetric|null $metricTotal = null,
+        ?CoverageMetric $metricTotal = null,
     ): array {
         $results = [];
         foreach ($minCoverageRules->getRules() as $minCoverageRule) {
