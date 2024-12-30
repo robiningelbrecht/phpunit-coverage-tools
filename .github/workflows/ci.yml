@@ -40,7 +40,7 @@ jobs:
 
       # https://github.com/marketplace/actions/codecov
       - name: Send test coverage to codecov.io
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           files: clover.xml,!tests/clover.xml,!tests/clover-invalid.xml,!tests/clover-test-divide-by-zero.xml
           fail_ci_if_error: true # optional (default = false)
