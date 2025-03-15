@@ -49,7 +49,7 @@ final class ConsoleOutput
     }
 
     /**
-     * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[] $results
+     * @param MinCoverageResult[] $results
      */
     public function print(array $results, Duration $duration): void
     {
@@ -93,7 +93,7 @@ final class ConsoleOutput
                             ]),
                         ]
                     ),
-                   $result->exitOnLowCoverage() ? 'Yes' : 'No',
+                    $result->exitOnLowCoverage() ? 'Yes' : 'No',
                 ], $results),
                 new TableSeparator(),
                 [
@@ -102,9 +102,9 @@ final class ConsoleOutput
                         [
                             'colspan' => 5,
                             'style' => new TableCellStyle([
-                                    'align' => 'center',
-                                    'cellFormat' => '<'.$finalStatus->value.'>%s</'.$finalStatus->value.'>',
-                                ]
+                                'align' => 'center',
+                                'cellFormat' => '<'.$finalStatus->value.'>%s</'.$finalStatus->value.'>',
+                            ]
                             ),
                         ]
                     ),

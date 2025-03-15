@@ -8,7 +8,7 @@ use SebastianBergmann\Timer\Duration;
 final class PausedTimer implements Timer
 {
     private function __construct(
-        private readonly Duration $duration
+        private readonly Duration $duration,
     ) {
     }
 

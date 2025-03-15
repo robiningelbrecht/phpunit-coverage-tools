@@ -10,13 +10,13 @@ class MinCoverageRules
     public const TOTAL = 'Total';
 
     private function __construct(
-        /** @var \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule[] */
-        private readonly array $rules
+        /** @var MinCoverageRule[] */
+        private readonly array $rules,
     ) {
     }
 
     /**
-     * @return \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageRule[]
+     * @return MinCoverageRule[]
      */
     public function getRules(): array
     {

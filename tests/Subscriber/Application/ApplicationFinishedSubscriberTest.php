@@ -65,7 +65,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -99,7 +99,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -133,7 +133,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -167,7 +167,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -201,7 +201,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -235,7 +235,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -269,7 +269,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -303,7 +303,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -337,7 +337,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -374,7 +374,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),
@@ -408,7 +408,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
                     time: HRTime::fromSecondsAndNanoseconds(1, 0),
                     memoryUsage: MemoryUsage::fromBytes(100),
                     peakMemoryUsage: MemoryUsage::fromBytes(100),
-                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, null, null, null, null, null, null, null, null)
+                    garbageCollectorStatus: new GarbageCollectorStatus(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 ),
                 durationSinceStart: Duration::fromSecondsAndNanoseconds(1, 0),
                 memorySinceStart: MemoryUsage::fromBytes(100),

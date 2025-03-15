@@ -10,7 +10,7 @@ class MinCoverageResult
         private readonly float $actualMinCoverage,
         private readonly int $numberOfTrackedLines,
         private readonly int $numberOfCoveredLines,
-        private readonly bool $exitOnLowCoverage
+        private readonly bool $exitOnLowCoverage,
     ) {
     }
 
@@ -54,9 +54,9 @@ class MinCoverageResult
     }
 
     /**
-     * @param \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\CoverageMetric[] $metrics
+     * @param CoverageMetric[] $metrics
      *
-     * @return \RobinIngelbrecht\PHPUnitCoverageTools\MinCoverage\MinCoverageResult[]
+     * @return MinCoverageResult[]
      */
     public static function mapFromRulesAndMetrics(
         MinCoverageRules $minCoverageRules,

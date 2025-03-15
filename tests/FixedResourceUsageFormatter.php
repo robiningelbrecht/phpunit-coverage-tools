@@ -8,7 +8,7 @@ use SebastianBergmann\Timer\Duration;
 final class FixedResourceUsageFormatter implements ResourceUsageFormatter
 {
     private function __construct(
-        private readonly float $usageInMb
+        private readonly float $usageInMb,
     ) {
     }
 

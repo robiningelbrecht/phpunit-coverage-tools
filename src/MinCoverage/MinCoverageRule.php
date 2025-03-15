@@ -9,7 +9,7 @@ final class MinCoverageRule
     public function __construct(
         private readonly string $pattern,
         private readonly int $minCoverage,
-        private readonly bool $exitOnLowCoverage
+        private readonly bool $exitOnLowCoverage,
     ) {
         if ($this->minCoverage < 0 || $this->minCoverage > 100) {
             throw new \RuntimeException(sprintf('MinCoverage has to be value between 0 and 100. %s given', $this->minCoverage));

@@ -8,7 +8,7 @@ use SebastianBergmann\Timer\ResourceUsageFormatter as PhpUnitResourceUsageFormat
 final class SystemResourceUsageFormatter implements ResourceUsageFormatter
 {
     private function __construct(
-        private readonly PhpUnitResourceUsageFormatter $resourceUsageFormatter
+        private readonly PhpUnitResourceUsageFormatter $resourceUsageFormatter,
     ) {
     }
 
