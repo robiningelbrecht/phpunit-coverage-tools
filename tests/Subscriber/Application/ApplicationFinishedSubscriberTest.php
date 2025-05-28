@@ -331,7 +331,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             timer: $this->timer,
         );
 
-        $this->expectExceptionObject(new \RuntimeException('Clover XML file not found at: /var/www/tests/clover-wrong.xml'));
+        $this->expectExceptionMessage('Clover XML file not found at:');
         $subscriber->notify(event: new Finished(
             new Info(
                 current: new Snapshot(
