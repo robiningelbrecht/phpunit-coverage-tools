@@ -21,7 +21,7 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 final class ApplicationFinishedSubscriber extends FormatterHelper implements FinishedSubscriber
 {
     public function __construct(
-        private readonly string $relativePathToCloverXml,
+        private readonly string $pathToCloverXml,
         private readonly MinCoverageRules $minCoverageRules,
         private readonly bool $cleanUpCloverXml,
         private readonly Exitter $exitter,
@@ -35,10 +35,15 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         $this->timer->start();
         /** @var string $reflectionFileName */
         $reflectionFileName = (new \ReflectionClass(ClassLoader::class))->getFileName();
-        $absolutePathToCloverXml = dirname($reflectionFileName, 3).'/'.$this->relativePathToCloverXml;
+
+        $absolutePathToCloverXml = $this->pathToCloverXml;
+        if (!str_starts_with($this->pathToCloverXml, '/')) {
+            // User is probably using relative path to clover.xml
+            $absolutePathToCloverXml = dirname($reflectionFileName, 3).'/'.$this->pathToCloverXml;
+        }
 
         if (!file_exists($absolutePathToCloverXml)) {
-            return;
+            throw new \RuntimeException('Clover XML file not found at: '.$absolutePathToCloverXml);
         }
 
         /** @var CoverageMetric[] $metrics */
@@ -146,7 +151,7 @@ final class ApplicationFinishedSubscriber extends FormatterHelper implements Fin
         }
 
         return new self(
-            relativePathToCloverXml: $configuration->coverageClover(),
+            pathToCloverXml: $configuration->coverageClover(),
             minCoverageRules: $rules,
             cleanUpCloverXml: $cleanUpCloverXml,
             exitter: new Exitter(),
