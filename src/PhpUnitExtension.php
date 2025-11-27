@@ -21,7 +21,7 @@ final class PhpUnitExtension implements Extension
         if (!$subscriber = ApplicationFinishedSubscriber::fromConfigurationAndParameters(
             configuration: $configuration,
             parameters: $parameters,
-            args: $_SERVER['argv'],
+            args: $_SERVER['argv'], // @phpstan-ignore argument.type
         )) {
             return;
         }

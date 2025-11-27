@@ -53,6 +53,7 @@ final class ConsoleOutput
      */
     public function print(array $results, Duration $duration): void
     {
+        /** @var non-empty-array<int> $statusWeights */
         $statusWeights = array_map(fn (MinCoverageResult $result) => $result->getStatus()->getWeight(), $results);
         $finalStatus = ResultStatus::fromWeight(max($statusWeights));
 
