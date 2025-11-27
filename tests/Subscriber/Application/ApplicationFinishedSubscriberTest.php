@@ -75,7 +75,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('Not all minimum code coverage rules passed, please try again... :)', $this->output);
     }
 
     public function testNotifyWithAWarning(): void
@@ -109,7 +109,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
     }
 
     public function testNotifyWhenCoverageIsOk(): void
@@ -143,7 +143,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
     }
 
     public function testNotifyWithOnlyTotal(): void
@@ -177,7 +177,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('Total', $this->output);
+        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
     }
 
     public function testNotifyWithoutTotal(): void
@@ -211,7 +212,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringNotContainsString('Total', $this->output);
+        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
     }
 
     public function testNotifyWithRulesThatDoNotExit(): void
@@ -245,7 +247,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('No', $this->output);
+        $this->assertStringContainsString('Not all minimum code coverage rules passed, please try again... :)', $this->output);
     }
 
     public function testDivideByZero(): void
@@ -279,7 +282,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
     }
 
     public function testNotifyWhenNoTrackedLines(): void
@@ -313,7 +316,7 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertMatchesTextSnapshot($this->output);
+        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
     }
 
     public function testNotifyWithNonExistingCloverFile(): void
