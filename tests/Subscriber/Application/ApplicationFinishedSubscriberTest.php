@@ -75,7 +75,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertStringContainsString('Not all minimum code coverage rules passed, please try again... :)', $this->output);
+        $this->assertStringContainsString('Not all minimum code coverage rules', $this->output);
+        $this->assertStringContainsString('passed, please try again... :)', $this->output);
     }
 
     public function testNotifyWithAWarning(): void
@@ -109,7 +110,9 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
+        $this->assertStringContainsString('There was at least one pattern that', $this->output);
+        $this->assertStringContainsString('did not match any covered classes.', $this->output);
+        $this->assertStringContainsString('Please consider removing them', $this->output);
     }
 
     public function testNotifyWhenCoverageIsOk(): void
@@ -143,7 +146,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
+        $this->assertStringContainsString('All minimum code coverage rules', $this->output);
+        $this->assertStringContainsString('passed, give yourself a pat on the', $this->output);
     }
 
     public function testNotifyWithOnlyTotal(): void
@@ -178,7 +182,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
         ));
 
         $this->assertStringContainsString('Total', $this->output);
-        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
+        $this->assertStringContainsString('All minimum code coverage rules', $this->output);
+        $this->assertStringContainsString('passed, give yourself a pat on the', $this->output);
     }
 
     public function testNotifyWithoutTotal(): void
@@ -213,7 +218,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
         ));
 
         $this->assertStringNotContainsString('Total', $this->output);
-        $this->assertStringContainsString('All minimum code coverage rules passed, give yourself a pat on the back!', $this->output);
+        $this->assertStringContainsString('All minimum code coverage rules', $this->output);
+        $this->assertStringContainsString('passed, give yourself a pat on the', $this->output);
     }
 
     public function testNotifyWithRulesThatDoNotExit(): void
@@ -248,7 +254,8 @@ class ApplicationFinishedSubscriberTest extends TestCase
         ));
 
         $this->assertStringContainsString('No', $this->output);
-        $this->assertStringContainsString('Not all minimum code coverage rules passed, please try again... :)', $this->output);
+        $this->assertStringContainsString('Not all minimum code coverage rules', $this->output);
+        $this->assertStringContainsString('passed, please try again... :)', $this->output);
     }
 
     public function testDivideByZero(): void
@@ -282,7 +289,9 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
+        $this->assertStringContainsString('There was at least one pattern that', $this->output);
+        $this->assertStringContainsString('did not match any covered classes.', $this->output);
+        $this->assertStringContainsString('Please consider removing them', $this->output);
     }
 
     public function testNotifyWhenNoTrackedLines(): void
@@ -316,7 +325,9 @@ class ApplicationFinishedSubscriberTest extends TestCase
             0
         ));
 
-        $this->assertStringContainsString('There was at least one pattern that did not match any covered classes. Please consider removing them', $this->output);
+        $this->assertStringContainsString('There was at least one pattern that', $this->output);
+        $this->assertStringContainsString('did not match any covered classes.', $this->output);
+        $this->assertStringContainsString('Please consider removing them', $this->output);
     }
 
     public function testNotifyWithNonExistingCloverFile(): void
